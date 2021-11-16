@@ -11,6 +11,7 @@ import uet.oop.bomberman.entities.*;
 import uet.oop.bomberman.entities.movable.Bomber;
 import uet.oop.bomberman.entities.movable.enemy.Balloon;
 import uet.oop.bomberman.graphics.Sprite;
+import uet.oop.bomberman.level.Coordinates;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -26,10 +27,10 @@ public class BombermanGame extends Application {
 
     private GraphicsContext gc;
     private Canvas canvas;
-    private List<Entity> entities = new ArrayList<>();
-    private List<Entity> stillObjects = new ArrayList<>();
+    public static List<Entity> entities = new ArrayList<>();
+    public static List<Entity> stillObjects = new ArrayList<>();
     public char[][] mapMatrix;
-    static Entity bomberman;
+    public static Bomber bomberman;
 
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
@@ -66,6 +67,7 @@ public class BombermanGame extends Application {
 
         bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
         entities.add(bomberman);
+
     }
 
     public void setKeyListener(Scene scene) {
@@ -87,12 +89,15 @@ public class BombermanGame extends Application {
                 case DOWN:
                     bomberman.moveDown();
                     break;
+                case K:
+                    bomberman.setAlive(false);
             }
         });
     }
 
     public void createMap() {
         createMapFromFile("res/levels/Level1.txt");
+        int cnt = 0;
         for (int i = 0; i < WIDTH; i++) {
             for (int j = 0; j < HEIGHT; j++) {
                 Entity object;
@@ -100,12 +105,11 @@ public class BombermanGame extends Application {
                     case '#':
                         object = new Wall(i, j, Sprite.wall.getFxImage());
                         stillObjects.add(object);
-
                         break;
                     case '*':
                         object = new Brick(i, j, Sprite.brick.getFxImage());
                         stillObjects.add(object);
-
+                        cnt++;
                         break;
                     case '1':
                         object = new Balloon(i, j, Sprite.balloom_left1.getFxImage());
@@ -117,11 +121,11 @@ public class BombermanGame extends Application {
                         object = new Grass(i, j, Sprite.grass.getFxImage());
                         stillObjects.add(object);
                         break;
-
                 }
 
             }
         }
+        System.out.println(cnt);
     }
 
     /**
@@ -137,7 +141,6 @@ public class BombermanGame extends Application {
             fis = new FileInputStream(URL);
             reader = new BufferedReader(new InputStreamReader(fis));
             String line = reader.readLine();
-            ;
 
             String[] tokens = line.split("\\s");
 

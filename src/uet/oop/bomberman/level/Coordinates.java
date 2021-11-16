@@ -4,7 +4,7 @@ import uet.oop.bomberman.graphics.Sprite;
 
 public class Coordinates {
     public static int pixelToTile(double i) {
-        return (int) (i / Sprite.SCALED_SIZE);
+        return  (int) (i / Sprite.SCALED_SIZE);
     }
 
     public static int tileToPixel(int i) {
