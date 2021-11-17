@@ -7,16 +7,33 @@ import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.Wall;
 import uet.oop.bomberman.graphics.Sprite;
 
-public class Movable extends Entity {
-    private final int allowDistance = 8;
+public abstract class Movable extends Entity {
+    private final int allowDistance = 12;
     private int step = 0;
-    private int speed = 4;
+    private int speed = 5;
     protected boolean isMoving = false;
     protected boolean isAlive = true;
+    protected String lastDirection = "RIGHT";
     protected int frameToDisapear = 48;
 
     public Movable(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
+    }
+
+    public abstract void kill();
+
+    public abstract void afterKill();
+
+    public void setStep(int step) {
+        this.step = step;
+    }
+
+    public boolean isMoving() {
+        return isMoving;
+    }
+
+    public void setMoving(boolean moving) {
+        isMoving = moving;
     }
 
     public boolean isAlive() {
@@ -27,22 +44,29 @@ public class Movable extends Entity {
         isAlive = alive;
     }
 
+    public String getLastDirection() {
+        return lastDirection;
+    }
+
+    public void setLastDirection(String lastDirection) {
+        this.lastDirection = lastDirection;
+    }
+
     public void moveRight() {
         if (canMoveRight()) {
             this.x = this.x + speed;
         }
         step++;
         System.out.println("Step: " + step);
-        switch (step % 5) {
-            case 0:
+        switch (step % 10) {
+            case 1:
                 setImg(Sprite.player_right_1.getFxImage());
                 break;
-            case 3:
+            case 5:
                 setImg(Sprite.player_right_2.getFxImage());
                 break;
         }
-        System.out.println("Right: " + x);
-        System.out.println("Max-Right: " + getMaxX());
+
         System.out.println("Tọa độ người chơi: X: " + x
                 + " Y: " + y);
         System.out.println("Tọa độ người chơi max: X: " + getMaxX()
@@ -55,14 +79,14 @@ public class Movable extends Entity {
         }
         step++;
         switch (step % 10) {
-            case 0:
+            case 1:
                 setImg(Sprite.player_left_1.getFxImage());
                 break;
             case 5:
                 setImg(Sprite.player_left_2.getFxImage());
                 break;
         }
-        System.out.println("Left: " + x);
+
         System.out.println("Tọa độ người chơi: X: " + x
                 + " Y: " + y);
         System.out.println("Tọa độ người chơi max: X: " + getMaxX()
@@ -74,7 +98,16 @@ public class Movable extends Entity {
             this.y = this.y - speed;
         }
 
-        System.out.println("Up: " + y);
+        step++;
+        switch (step % 10) {
+            case 1:
+                setImg(Sprite.player_up_1.getFxImage());
+                break;
+            case 5:
+                setImg(Sprite.player_up_2.getFxImage());
+                break;
+        }
+
         System.out.println("Tọa độ người chơi: X: " + x
                 + " Y: " + y);
         System.out.println("Tọa độ người chơi max: X: " + getMaxX()
@@ -85,8 +118,17 @@ public class Movable extends Entity {
         if (canMoveDown()) {
             this.y = this.y + speed;
         }
-        System.out.println("Down: " + getY());
-        System.out.println("Down: " + getMaxY());
+
+        step++;
+        switch (step % 10) {
+            case 1:
+                setImg(Sprite.player_down_1.getFxImage());
+                break;
+            case 5:
+                setImg(Sprite.player_down_2.getFxImage());
+                break;
+        }
+
         System.out.println("Tọa độ người chơi: X: " + x
                 + " Y: " + y);
         System.out.println("Tọa độ người chơi max: X: " + getMaxX()

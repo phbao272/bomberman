@@ -10,6 +10,16 @@ public class Bomber extends Movable {
     }
 
     @Override
+    public void kill() {
+
+    }
+
+    @Override
+    public void afterKill() {
+
+    }
+
+    @Override
     public void update() {
         if (!isAlive) {
             if (frameToDisapear > 0) {
@@ -30,6 +40,27 @@ public class Bomber extends Movable {
                 frameToDisapear--;
             } else {
                 BombermanGame.entities.remove(this);
+            }
+        }
+
+        if (!isMoving) {
+            this.setStep(0);
+
+            switch (lastDirection) {
+                case "RIGHT":
+                    img = Sprite.player_right.getFxImage();
+                    break;
+                case "LEFT":
+                    img = Sprite.player_left.getFxImage();
+                    break;
+                case "UP":
+                    img = Sprite.player_up.getFxImage();
+                    break;
+                case "DOWN":
+                    img = Sprite.player_down.getFxImage();
+                    break;
+                default:
+                    break;
             }
         }
     }

@@ -7,11 +7,11 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
+import uet.oop.bomberman.audio.Audio;
 import uet.oop.bomberman.entities.*;
 import uet.oop.bomberman.entities.movable.Bomber;
 import uet.oop.bomberman.entities.movable.enemy.Balloon;
 import uet.oop.bomberman.graphics.Sprite;
-import uet.oop.bomberman.level.Coordinates;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -31,6 +31,8 @@ public class BombermanGame extends Application {
     public static List<Entity> stillObjects = new ArrayList<>();
     public char[][] mapMatrix;
     public static Bomber bomberman;
+
+    private Audio myAudio;
 
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
@@ -61,9 +63,12 @@ public class BombermanGame extends Application {
                 update();
             }
         };
+
         timer.start();
         setKeyListener(scene);
         createMap();
+
+//        myAudio.playSound("C:\\Users\\Admin\\Desktop\\bomberman-start\\res\\audio\\background_music.wav");
 
         bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
         entities.add(bomberman);
@@ -76,28 +81,61 @@ public class BombermanGame extends Application {
                 case D:
                 case RIGHT:
                     bomberman.moveRight();
+                    bomberman.setMoving(true);
                     break;
                 case A:
                 case LEFT:
                     bomberman.moveLeft();
+                    bomberman.setMoving(true);
                     break;
                 case W:
                 case UP:
                     bomberman.moveUp();
+                    bomberman.setMoving(true);
                     break;
                 case S:
                 case DOWN:
                     bomberman.moveDown();
+                    bomberman.setMoving(true);
                     break;
                 case K:
+                    // TODO: Test player die
                     bomberman.setAlive(false);
+            }
+        });
+
+        scene.setOnKeyReleased(keyEvent -> {
+            bomberman.setMoving(false);
+            switch (keyEvent.getCode()) {
+                case D:
+                case RIGHT:
+                    bomberman.moveRight();
+                    bomberman.setLastDirection("RIGHT");
+                    break;
+                case A:
+                case LEFT:
+                    bomberman.moveLeft();
+                    bomberman.setLastDirection("LEFT");
+                    break;
+                case W:
+                case UP:
+                    bomberman.moveUp();
+                    bomberman.setLastDirection("UP");
+                    break;
+                case S:
+                case DOWN:
+                    bomberman.moveDown();
+                    bomberman.setLastDirection("DOWN");
+                    break;
+                default:
+                    break;
             }
         });
     }
 
     public void createMap() {
         createMapFromFile("res/levels/Level1.txt");
-        int cnt = 0;
+        int cntBrick = 0;
         for (int i = 0; i < WIDTH; i++) {
             for (int j = 0; j < HEIGHT; j++) {
                 Entity object;
@@ -109,7 +147,7 @@ public class BombermanGame extends Application {
                     case '*':
                         object = new Brick(i, j, Sprite.brick.getFxImage());
                         stillObjects.add(object);
-                        cnt++;
+                        cntBrick++;
                         break;
                     case '1':
                         object = new Balloon(i, j, Sprite.balloom_left1.getFxImage());
@@ -125,7 +163,7 @@ public class BombermanGame extends Application {
 
             }
         }
-        System.out.println(cnt);
+        System.out.println("Số gạch trong map: " + cntBrick);
     }
 
     /**

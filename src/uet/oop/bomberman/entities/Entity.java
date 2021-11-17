@@ -74,8 +74,6 @@ public abstract class Entity {
         return impactY && intersectX;
     }
 
-
-
     public void setImg(Image img) {
         this.img = img;
     }
