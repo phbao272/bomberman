@@ -139,6 +139,8 @@ public class BombermanGame extends Application {
         for (int i = 0; i < WIDTH; i++) {
             for (int j = 0; j < HEIGHT; j++) {
                 Entity object;
+                object = new Grass(i, j, Sprite.grass.getFxImage());
+                stillObjects.add(object);
                 switch (mapMatrix[j][i]) {
                     case '#':
                         object = new Wall(i, j, Sprite.wall.getFxImage());
@@ -152,15 +154,12 @@ public class BombermanGame extends Application {
                     case '1':
                         object = new Balloon(i, j, Sprite.balloom_left1.getFxImage());
                         stillObjects.add(object);
-                        object = new Grass(i, j, Sprite.grass.getFxImage());
-                        stillObjects.add(object);
                         break;
                     default:
                         object = new Grass(i, j, Sprite.grass.getFxImage());
                         stillObjects.add(object);
                         break;
                 }
-
             }
         }
         System.out.println("Số gạch trong map: " + cntBrick);
