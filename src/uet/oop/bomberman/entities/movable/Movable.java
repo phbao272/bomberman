@@ -10,7 +10,7 @@ import uet.oop.bomberman.graphics.Sprite;
 public abstract class Movable extends Entity {
     private final int allowDistance = 12;
     private int step = 0;
-    private int speed = 5;
+    private int speed = 6;
     protected boolean isMoving = false;
     protected boolean isAlive = true;
     protected String lastDirection = "RIGHT";
