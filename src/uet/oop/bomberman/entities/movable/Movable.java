@@ -148,6 +148,8 @@ public abstract class Movable extends Entity {
         return true;
     }
 
+    protected abstract void randomMove();
+
     @Override
     public void update() {
         

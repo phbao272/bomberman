@@ -118,6 +118,7 @@ public class BombermanGame extends Application {
                         listBombs.add(bomb);
                         System.out.println("Đặt bom bùm bùm...");
                     }
+                    System.out.println(entities.size());
                     break;
             }
         });
@@ -152,7 +153,8 @@ public class BombermanGame extends Application {
     }
 
     public void createMap() {
-        createMapFromFile("res/levels/Level1.txt");
+//        createMapFromFile("res/levels/Level1.txt");
+        createMapFromFile("res/levels/test.txt");
         int cntBrick = 0;
         for (int i = 0; i < WIDTH; i++) {
             for (int j = 0; j < HEIGHT; j++) {
@@ -171,7 +173,7 @@ public class BombermanGame extends Application {
                         break;
                     case '1':
                         object = new Balloon(i, j, Sprite.balloom_left1.getFxImage());
-                        stillObjects.add(object);
+                        entities.add(object);
                         break;
                     default:
                         object = new Grass(i, j, Sprite.grass.getFxImage());

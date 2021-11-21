@@ -21,8 +21,6 @@ public abstract class Entity {
         this.img = img;
     }
 
-//    public abstract void chooseSprite();
-
     public int getX() {
         return x;
     }

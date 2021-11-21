@@ -19,6 +19,11 @@ public class Bomber extends Movable {
 
     }
 
+    @Override
+    protected void randomMove() {
+
+    }
+
     public void moveRight() {
         if (canMoveRight()) {
             this.x = this.x + speed;
