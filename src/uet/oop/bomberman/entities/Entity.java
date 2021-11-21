@@ -3,6 +3,7 @@ package uet.oop.bomberman.entities;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.graphics.Sprite;
+import uet.oop.bomberman.level.Coordinates;
 
 public abstract class Entity {
     //Tọa độ X tính từ góc trái trên trong Canvas
@@ -36,6 +37,14 @@ public abstract class Entity {
 
     public int getMaxY() {
         return y + Sprite.SCALED_SIZE;
+    }
+
+    public int getTileX() {
+        return Coordinates.pixelToTile(x + Sprite.SCALED_SIZE / 2);
+    }
+
+    public int getTileY() {
+        return Coordinates.pixelToTile(y + Sprite.SCALED_SIZE / 2);
     }
 
     public boolean intersectLeft(Entity other) {
