@@ -2,7 +2,6 @@ package uet.oop.bomberman.entities;
 
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
-import uet.oop.bomberman.graphics.Screen;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.level.Coordinates;
 
@@ -87,14 +86,6 @@ public abstract class Entity {
     public void setImg(Image img) {
         this.img = img;
     }
-
-    public Image getImg() {
-        return img;
-    }
-
-//    public void render(GraphicsContext gc) {
-//        gc.drawImage(img, x, y);
-//    }
 
     public void render(GraphicsContext gc) {
         gc.drawImage(img, x, y);
