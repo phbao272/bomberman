@@ -11,7 +11,7 @@ import uet.oop.bomberman.audio.Audio;
 import uet.oop.bomberman.entities.*;
 import uet.oop.bomberman.entities.bomb.Bomb;
 import uet.oop.bomberman.entities.movable.Bomber;
-import uet.oop.bomberman.entities.movable.enemy.Balloon;
+import uet.oop.bomberman.entities.movable.enemy.*;
 import uet.oop.bomberman.graphics.Sprite;
 
 import java.io.BufferedReader;
@@ -35,7 +35,7 @@ public class BombermanGame extends Application {
     public char[][] mapMatrix;
     public static Bomber bomberman;
 
-    private Audio myAudio;
+    private Audio myAudio = new Audio();
 
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
@@ -71,7 +71,7 @@ public class BombermanGame extends Application {
         setKeyListener(scene);
         createMap();
 
-//        myAudio.playSound("C:\\Users\\Admin\\Desktop\\bomberman-start\\res\\audio\\background_music.wav");
+        myAudio.playSound("res/audio/background_music.wav");
 
         bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
         entities.add(bomberman);
@@ -104,6 +104,7 @@ public class BombermanGame extends Application {
                 case K:
                     // TODO: Test player die
                     bomberman.setAlive(false);
+                    myAudio.playSound("res/audio/dead.wav");
                     break;
                 case N:
                     // TODO: Test player die
@@ -116,11 +117,14 @@ public class BombermanGame extends Application {
 
                         Bomb bomb = new Bomb(xTilePlayer, yTilePlayer, Sprite.bomb.getFxImage());
                         listBombs.add(bomb);
+                        myAudio.playSound("res/audio/place_bomb.wav");
                         System.out.println("Đặt bom bùm bùm...");
                     }
                     System.out.println(entities.size());
                     break;
+
             }
+            myAudio.playSound("res/audio/walk.wav");
         });
 
         scene.setOnKeyReleased(keyEvent -> {
@@ -175,9 +179,21 @@ public class BombermanGame extends Application {
                         object = new Balloon(i, j, Sprite.balloom_left1.getFxImage());
                         entities.add(object);
                         break;
-                    default:
-                        object = new Grass(i, j, Sprite.grass.getFxImage());
-                        stillObjects.add(object);
+                    case '2' :
+                        object = new Oneal(i, j, Sprite.oneal_left1.getFxImage());
+                        entities.add(object);
+                        break;
+                    case '3' :
+                        object = new Doll(i, j, Sprite.doll_left1.getFxImage());
+                        entities.add(object);
+                        break;
+                    case '4' :
+                        object = new Minvo(i, j, Sprite.minvo_left1.getFxImage());
+                        entities.add(object);
+                        break;
+                    case '5' :
+                        object = new Kondoria(i, j, Sprite.kondoria_left1.getFxImage());
+                        entities.add(object);
                         break;
                 }
             }

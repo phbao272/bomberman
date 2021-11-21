@@ -8,21 +8,14 @@ public class Audio {
     public void playSound(String soundFile) {
         try {
             File f = new File("./" + soundFile);
-            AudioInputStream audioIn = AudioSystem.getAudioInputStream(f.toURI().toURL());
+            AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File(f.getAbsolutePath()));
             Clip clip = AudioSystem.getClip();
             clip.open(audioIn);
             clip.start();
+            clip.loop(0);
         } catch (Exception e) {
-
+            System.out.println("Error");
         }
-
-    }
-
-    public static void main(String[] args) throws UnsupportedAudioFileException, LineUnavailableException, IOException {
-//        File f = new File("src/uet/oop/bomberman/audio/dead.wav");
-//        AudioInputStream audioIn = AudioSystem.getAudioInputStream(f.toURI().toURL());
-//        Clip clip = AudioSystem.getClip();
-//        clip.open(audioIn);
-//        clip.start();
     }
 }
+
