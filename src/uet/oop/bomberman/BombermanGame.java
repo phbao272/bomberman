@@ -34,6 +34,10 @@ public class BombermanGame extends Application {
 
     private Audio myAudio;
 
+    public static Bomber getBomberman() {
+        return bomberman;
+    }
+
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
     }
@@ -153,7 +157,7 @@ public class BombermanGame extends Application {
                         break;
                     case '1':
                         object = new Balloon(i, j, Sprite.balloom_left1.getFxImage());
-                        stillObjects.add(object);
+                        entities.add(object);
                         break;
                     default:
                         object = new Grass(i, j, Sprite.grass.getFxImage());

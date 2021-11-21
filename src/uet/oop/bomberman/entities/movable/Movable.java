@@ -2,12 +2,14 @@ package uet.oop.bomberman.entities.movable;
 
 import javafx.scene.image.Image;
 import uet.oop.bomberman.BombermanGame;
+import uet.oop.bomberman.audio.Audio;
 import uet.oop.bomberman.entities.Brick;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.Wall;
 import uet.oop.bomberman.graphics.Sprite;
 
 public abstract class Movable extends Entity {
+    public int direction = -1;  //0 : up, 1 : right, 2 : down, 3 : left
     private final int allowDistance = 12;
     private int step = 0;
     private int speed = 6;
@@ -40,6 +42,8 @@ public abstract class Movable extends Entity {
         return isAlive;
     }
 
+    protected abstract void calculateMove();
+
     public void setAlive(boolean alive) {
         isAlive = alive;
     }
@@ -54,7 +58,7 @@ public abstract class Movable extends Entity {
 
     public void moveRight() {
         if (canMoveRight()) {
-            this.x = this.x + speed;
+            x += speed;
         }
         step++;
         System.out.println("Step: " + step);
@@ -75,7 +79,7 @@ public abstract class Movable extends Entity {
 
     public void moveLeft() {
         if (canMoveLeft()) {
-            this.x = this.x - speed;
+            x -= speed;
         }
         step++;
         switch (step % 10) {
@@ -95,7 +99,7 @@ public abstract class Movable extends Entity {
 
     public void moveUp() {
         if (canMoveUp()) {
-            this.y = this.y - speed;
+            y -= speed;
         }
 
         step++;
@@ -116,7 +120,7 @@ public abstract class Movable extends Entity {
 
     public void moveDown() {
         if (canMoveDown()) {
-            this.y = this.y + speed;
+            y += speed;
         }
 
         step++;
