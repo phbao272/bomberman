@@ -64,4 +64,9 @@ public class Bomber extends Movable {
             }
         }
     }
+
+    @Override
+    protected void calculateMove() {
+
+    }
 }
