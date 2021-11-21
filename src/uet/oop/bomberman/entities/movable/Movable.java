@@ -2,19 +2,21 @@ package uet.oop.bomberman.entities.movable;
 
 import javafx.scene.image.Image;
 import uet.oop.bomberman.BombermanGame;
+import uet.oop.bomberman.audio.Audio;
 import uet.oop.bomberman.entities.Brick;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.Wall;
-import uet.oop.bomberman.entities.bomb.Bomb;
+import uet.oop.bomberman.graphics.Sprite;
 
 public abstract class Movable extends Entity {
+    public int direction = -1;  //0 : up, 1 : right, 2 : down, 3 : left
     private final int allowDistance = 12;
-    protected int step = 0;
-    protected int speed = 4;
+    private int step = 0;
+    private int speed = 6;
     protected boolean isMoving = false;
     protected boolean isAlive = true;
     protected String lastDirection = "RIGHT";
-    protected int frameToDisappear = 48;
+    protected int frameToDisapear = 48;
 
     public Movable(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
@@ -40,6 +42,8 @@ public abstract class Movable extends Entity {
         return isAlive;
     }
 
+    protected abstract void calculateMove();
+
     public void setAlive(boolean alive) {
         isAlive = alive;
     }
@@ -50,6 +54,89 @@ public abstract class Movable extends Entity {
 
     public void setLastDirection(String lastDirection) {
         this.lastDirection = lastDirection;
+    }
+
+    public void moveRight() {
+        if (canMoveRight()) {
+            x += speed;
+        }
+        step++;
+        System.out.println("Step: " + step);
+        switch (step % 10) {
+            case 1:
+                setImg(Sprite.player_right_1.getFxImage());
+                break;
+            case 5:
+                setImg(Sprite.player_right_2.getFxImage());
+                break;
+        }
+
+        System.out.println("Tọa độ người chơi: X: " + x
+                + " Y: " + y);
+        System.out.println("Tọa độ người chơi max: X: " + getMaxX()
+                + " Y: " + getMaxY());
+    }
+
+    public void moveLeft() {
+        if (canMoveLeft()) {
+            x -= speed;
+        }
+        step++;
+        switch (step % 10) {
+            case 1:
+                setImg(Sprite.player_left_1.getFxImage());
+                break;
+            case 5:
+                setImg(Sprite.player_left_2.getFxImage());
+                break;
+        }
+
+        System.out.println("Tọa độ người chơi: X: " + x
+                + " Y: " + y);
+        System.out.println("Tọa độ người chơi max: X: " + getMaxX()
+                + " Y: " + getMaxY());
+    }
+
+    public void moveUp() {
+        if (canMoveUp()) {
+            y -= speed;
+        }
+
+        step++;
+        switch (step % 10) {
+            case 1:
+                setImg(Sprite.player_up_1.getFxImage());
+                break;
+            case 5:
+                setImg(Sprite.player_up_2.getFxImage());
+                break;
+        }
+
+        System.out.println("Tọa độ người chơi: X: " + x
+                + " Y: " + y);
+        System.out.println("Tọa độ người chơi max: X: " + getMaxX()
+                + " Y: " + getMaxY());
+    }
+
+    public void moveDown() {
+        if (canMoveDown()) {
+            y += speed;
+        }
+
+        step++;
+        switch (step % 10) {
+            case 1:
+                setImg(Sprite.player_down_1.getFxImage());
+                break;
+            case 5:
+                setImg(Sprite.player_down_2.getFxImage());
+                break;
+        }
+
+        System.out.println("Tọa độ người chơi: X: " + x
+                + " Y: " + y);
+        System.out.println("Tọa độ người chơi max: X: " + getMaxX()
+                + " Y: " + getMaxY());
     }
 
     public boolean canMoveRight() {
@@ -64,12 +151,6 @@ public abstract class Movable extends Entity {
                     }
                     return false;
                 }
-            }
-        }
-
-        for (Bomb bomb : BombermanGame.listBombs) {
-            if (bomb.intersectLeft(this)) {
-                return false;
             }
         }
 
@@ -90,13 +171,6 @@ public abstract class Movable extends Entity {
                 }
             }
         }
-
-        for (Bomb bomb : BombermanGame.listBombs) {
-            if (bomb.intersectRight(this)) {
-                return false;
-            }
-        }
-
         return true;
     }
 
@@ -114,13 +188,6 @@ public abstract class Movable extends Entity {
                 }
             }
         }
-
-        for (Bomb bomb : BombermanGame.listBombs) {
-            if (bomb.intersectDown(this)) {
-                return false;
-            }
-        }
-
         return true;
     }
 
@@ -138,13 +205,6 @@ public abstract class Movable extends Entity {
                 }
             }
         }
-
-        for (Bomb bomb : BombermanGame.listBombs) {
-            if (bomb.intersectUp(this)) {
-                return false;
-            }
-        }
-
         return true;
     }
 

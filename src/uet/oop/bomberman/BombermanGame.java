@@ -9,7 +9,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
 import uet.oop.bomberman.audio.Audio;
 import uet.oop.bomberman.entities.*;
-import uet.oop.bomberman.entities.bomb.Bomb;
 import uet.oop.bomberman.entities.movable.Bomber;
 import uet.oop.bomberman.entities.movable.enemy.Balloon;
 import uet.oop.bomberman.graphics.Sprite;
@@ -25,17 +24,19 @@ public class BombermanGame extends Application {
 
     public static final int WIDTH = 31;
     public static final int HEIGHT = 13;
-    public int cntBomb = 1;
 
     private GraphicsContext gc;
     private Canvas canvas;
     public static List<Entity> entities = new ArrayList<>();
     public static List<Entity> stillObjects = new ArrayList<>();
-    public static List<Bomb> listBombs = new ArrayList<>();
     public char[][] mapMatrix;
     public static Bomber bomberman;
 
     private Audio myAudio;
+
+    public static Bomber getBomberman() {
+        return bomberman;
+    }
 
     public static void main(String[] args) {
         Application.launch(BombermanGame.class);
@@ -83,42 +84,27 @@ public class BombermanGame extends Application {
             switch (keyEvent.getCode()) {
                 case D:
                 case RIGHT:
-                    bomberman.setLastDirection("RIGHT");
+                    bomberman.moveRight();
                     bomberman.setMoving(true);
                     break;
                 case A:
                 case LEFT:
-                    bomberman.setLastDirection("LEFT");
+                    bomberman.moveLeft();
                     bomberman.setMoving(true);
                     break;
                 case W:
                 case UP:
-                    bomberman.setLastDirection("UP");
+                    bomberman.moveUp();
                     bomberman.setMoving(true);
                     break;
                 case S:
                 case DOWN:
-                    bomberman.setLastDirection("DOWN");
+                    bomberman.moveDown();
                     bomberman.setMoving(true);
                     break;
                 case K:
                     // TODO: Test player die
                     bomberman.setAlive(false);
-                    break;
-                case N:
-                    // TODO: Test player die
-                    System.out.println("Num of entities: " + entities.size());
-                    break;
-                case SPACE:
-                    if (listBombs.size() < 3) {
-                        int xTilePlayer = bomberman.getTileX();
-                        int yTilePlayer = bomberman.getTileY();
-
-                        Bomb bomb = new Bomb(xTilePlayer, yTilePlayer, Sprite.bomb.getFxImage());
-                        listBombs.add(bomb);
-                        System.out.println("Đặt bom bùm bùm...");
-                    }
-                    break;
             }
         });
 
@@ -128,22 +114,22 @@ public class BombermanGame extends Application {
                 case D:
                 case RIGHT:
                     bomberman.moveRight();
-//                    bomberman.setLastDirection("RIGHT");
+                    bomberman.setLastDirection("RIGHT");
                     break;
                 case A:
                 case LEFT:
                     bomberman.moveLeft();
-//                    bomberman.setLastDirection("LEFT");
+                    bomberman.setLastDirection("LEFT");
                     break;
                 case W:
                 case UP:
                     bomberman.moveUp();
-//                    bomberman.setLastDirection("UP");
+                    bomberman.setLastDirection("UP");
                     break;
                 case S:
                 case DOWN:
                     bomberman.moveDown();
-//                    bomberman.setLastDirection("DOWN");
+                    bomberman.setLastDirection("DOWN");
                     break;
                 default:
                     break;
@@ -171,7 +157,7 @@ public class BombermanGame extends Application {
                         break;
                     case '1':
                         object = new Balloon(i, j, Sprite.balloom_left1.getFxImage());
-                        stillObjects.add(object);
+                        entities.add(object);
                         break;
                     default:
                         object = new Grass(i, j, Sprite.grass.getFxImage());
@@ -237,22 +223,12 @@ public class BombermanGame extends Application {
     }
 
     public void update() {
-//        entities.forEach(Entity::update)
-//        listBombs.forEach(Entity::update);
-
-        for (int i = 0; i < entities.size(); i++) {
-            entities.get(i).update();
-        }
-
-        for (int i = 0; i < listBombs.size(); i++) {
-            listBombs.get(i).update();
-        }
+        entities.forEach(Entity::update);
     }
 
     public void render() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         stillObjects.forEach(g -> g.render(gc));
         entities.forEach(g -> g.render(gc));
-        listBombs.forEach(g -> g.render(gc));
     }
 }
