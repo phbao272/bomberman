@@ -6,7 +6,7 @@ import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.graphics.Sprite;
 
 public class Bomb extends Entity {
-    private int timeToExplode = 200;
+    private int timeToExplode = 200; // 200 / 60 (s)
     public Bomb(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
     }

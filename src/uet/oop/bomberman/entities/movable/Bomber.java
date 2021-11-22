@@ -30,19 +30,19 @@ public class Bomber extends Movable {
         }
         step++;
         System.out.println("Step: " + step);
-        switch (step % 10) {
+        switch (step % 20) {
             case 1:
                 setImg(Sprite.player_right_1.getFxImage());
                 break;
-            case 5:
+            case 10:
                 setImg(Sprite.player_right_2.getFxImage());
                 break;
         }
 
-        System.out.println("Tọa độ người chơi: X: " + x
-                + " Y: " + y);
-        System.out.println("Tọa độ người chơi max: X: " + getMaxX()
-                + " Y: " + getMaxY());
+//        System.out.println("Tọa độ người chơi: X: " + x
+//                + " Y: " + y);
+//        System.out.println("Tọa độ người chơi max: X: " + getMaxX()
+//                + " Y: " + getMaxY());
     }
 
     public void moveLeft() {
@@ -50,19 +50,19 @@ public class Bomber extends Movable {
             this.x = this.x - speed;
         }
         step++;
-        switch (step % 10) {
+        switch (step % 20) {
             case 1:
                 setImg(Sprite.player_left_1.getFxImage());
                 break;
-            case 5:
+            case 10:
                 setImg(Sprite.player_left_2.getFxImage());
                 break;
         }
 
-        System.out.println("Tọa độ người chơi: X: " + x
-                + " Y: " + y);
-        System.out.println("Tọa độ người chơi max: X: " + getMaxX()
-                + " Y: " + getMaxY());
+//        System.out.println("Tọa độ người chơi: X: " + x
+//                + " Y: " + y);
+//        System.out.println("Tọa độ người chơi max: X: " + getMaxX()
+//                + " Y: " + getMaxY());
     }
 
     public void moveUp() {
@@ -71,19 +71,19 @@ public class Bomber extends Movable {
         }
 
         step++;
-        switch (step % 10) {
+        switch (step % 20) {
             case 1:
                 setImg(Sprite.player_up_1.getFxImage());
                 break;
-            case 5:
+            case 10:
                 setImg(Sprite.player_up_2.getFxImage());
                 break;
         }
 
-        System.out.println("Tọa độ người chơi: X: " + x
-                + " Y: " + y);
-        System.out.println("Tọa độ người chơi max: X: " + getMaxX()
-                + " Y: " + getMaxY());
+//        System.out.println("Tọa độ người chơi: X: " + x
+//                + " Y: " + y);
+//        System.out.println("Tọa độ người chơi max: X: " + getMaxX()
+//                + " Y: " + getMaxY());
     }
 
     public void moveDown() {
@@ -92,19 +92,19 @@ public class Bomber extends Movable {
         }
 
         step++;
-        switch (step % 10) {
+        switch (step % 20) {
             case 1:
                 setImg(Sprite.player_down_1.getFxImage());
                 break;
-            case 5:
+            case 10:
                 setImg(Sprite.player_down_2.getFxImage());
                 break;
         }
 
-        System.out.println("Tọa độ người chơi: X: " + x
-                + " Y: " + y);
-        System.out.println("Tọa độ người chơi max: X: " + getMaxX()
-                + " Y: " + getMaxY());
+//        System.out.println("Tọa độ người chơi: X: " + x
+//                + " Y: " + y);
+//        System.out.println("Tọa độ người chơi max: X: " + getMaxX()
+//                + " Y: " + getMaxY());
     }
 
     @Override
