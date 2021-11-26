@@ -1,5 +1,6 @@
 package uet.oop.bomberman.entities;
 
+import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.graphics.Sprite;
@@ -17,7 +18,7 @@ public class Brick extends Entity{
     }
 
     @Override
-    public void update() {
+    public void render(GraphicsContext gc) {
         if (isDestroyed) {
             if (frameToDisappear > 0) {
                 switch (frameToDisappear) {
@@ -39,5 +40,11 @@ public class Brick extends Entity{
                 BombermanGame.stillObjects.remove(this);
             }
         }
+        gc.drawImage(img, x, y);
+    }
+
+    @Override
+    public void update() {
+
     }
 }

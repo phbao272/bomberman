@@ -9,13 +9,9 @@ import uet.oop.bomberman.graphics.Sprite;
 
 public class Bomb extends Entity {
     private int timeToExplode = 120; // 200 / 60 (s)
-    private int frameToDisappear = 24;
+    private int frameToDisappear = 12;
     private boolean isExploded = false;
     private DirectionalExplosion[] explosions = null;
-
-    public Bomb() {
-
-    }
 
     public void setExploded(boolean exploded) {
         isExploded = exploded;
@@ -47,7 +43,7 @@ public class Bomb extends Entity {
     @Override
     public void render(GraphicsContext gc) {
         if (isExploded) {
-            if (frameToDisappear == 24) {
+            if (frameToDisappear == 12) {
                 System.out.println("Bom đã nổ");
                 Audio.playSound("res/audio/explosion.wav");
             }

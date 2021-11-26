@@ -28,7 +28,8 @@ public class BombermanGame extends Application {
 
     public int cntBomb = 1;
     private int currentLevel = 1;
-    public static int bombRadius = 3;
+    public static int bombRadius = 10;
+    public int cntBrick = 0;
 
     public static GraphicsContext gc;
     private Canvas canvas;
@@ -113,6 +114,17 @@ public class BombermanGame extends Application {
                     System.out.println("Num of entities: " + entities.size());
                     nextMap();
                     break;
+                case M:
+                    // TODO: Test destroy brick
+
+                    for (Entity entity : stillObjects) {
+                        if (entity instanceof Brick) {
+                            ((Brick) entity).setDestroyed(true);
+                            System.out.println("Num of bricks: " + (--cntBrick));
+                            break;
+                        }
+                    }
+                    break;
                 case SPACE:
                     if (listBombs.size() < 3) {
                         int xTilePlayer = bomberman.getTileX();
@@ -170,7 +182,7 @@ public class BombermanGame extends Application {
         bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
         entities.add(bomberman);
 
-        int cntBrick = 0;
+
         for (int i = 0; i < WIDTH; i++) {
             for (int j = 0; j < HEIGHT; j++) {
                 Entity object;
@@ -311,8 +323,16 @@ public class BombermanGame extends Application {
 
     public void render() {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        stillObjects.forEach(g -> g.render(gc));
-        entities.forEach(g -> g.render(gc));
+//        entities.forEach(g -> g.render(gc));
+//        stillObjects.forEach(g -> g.render(gc));
+
+        for (int i = 0; i < stillObjects.size(); i++) {
+            stillObjects.get(i).render(gc);
+        }
+
+        for (int i = 0; i < entities.size(); i++) {
+            entities.get(i).render(gc);
+        }
 
         for (int i = 0; i < listBombs.size(); i++) {
             listBombs.get(i).render(gc);

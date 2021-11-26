@@ -87,14 +87,13 @@ public class DirectionalExplosion extends Entity {
             System.out.println(entity);
             if (entity instanceof Brick) {
                 ((Brick) entity).setDestroyed(true);
-                ++allowRadius;
+                allowRadius++;
                 break;
             } else if (entity instanceof Wall) {
                 break;
             }
-            ++allowRadius;
+            allowRadius++;
         }
-
         return allowRadius;
     }
 
