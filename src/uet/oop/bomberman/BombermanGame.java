@@ -25,14 +25,19 @@ public class BombermanGame extends Application {
 
     public static final int WIDTH = 31;
     public static final int HEIGHT = 13;
-    public int cntBomb = 1;
 
-    private GraphicsContext gc;
+    public int cntBomb = 1;
+    private int currentLevel = 1;
+    public static int bombRadius = 3;
+
+    public static GraphicsContext gc;
     private Canvas canvas;
+
     public static List<Entity> entities = new ArrayList<>();
     public static List<Entity> stillObjects = new ArrayList<>();
     public static List<Bomb> listBombs = new ArrayList<>();
     public char[][] mapMatrix;
+
     public static Bomber bomberman;
 
     private Audio myAudio = new Audio();
@@ -71,10 +76,7 @@ public class BombermanGame extends Application {
         setKeyListener(scene);
         createMap();
 
-        myAudio.playSound("res/audio/background_music.wav");
-
-        bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
-        entities.add(bomberman);
+//        myAudio.playSound("res/audio/background_music.wav");
 
     }
 
@@ -107,8 +109,9 @@ public class BombermanGame extends Application {
                     myAudio.playSound("res/audio/dead.wav");
                     break;
                 case N:
-                    // TODO: Test player die
+                    // TODO: Test next level
                     System.out.println("Num of entities: " + entities.size());
+                    nextMap();
                     break;
                 case SPACE:
                     if (listBombs.size() < 3) {
@@ -120,11 +123,8 @@ public class BombermanGame extends Application {
                         myAudio.playSound("res/audio/place_bomb.wav");
                         System.out.println("Đặt bom bùm bùm...");
                     }
-                    System.out.println(entities.size());
                     break;
-
             }
-            myAudio.playSound("res/audio/walk.wav");
         });
 
         scene.setOnKeyReleased(keyEvent -> {
@@ -133,22 +133,18 @@ public class BombermanGame extends Application {
                 case D:
                 case RIGHT:
                     bomberman.moveRight();
-//                    bomberman.setLastDirection("RIGHT");
                     break;
                 case A:
                 case LEFT:
                     bomberman.moveLeft();
-//                    bomberman.setLastDirection("LEFT");
                     break;
                 case W:
                 case UP:
                     bomberman.moveUp();
-//                    bomberman.setLastDirection("UP");
                     break;
                 case S:
                 case DOWN:
                     bomberman.moveDown();
-//                    bomberman.setLastDirection("DOWN");
                     break;
                 default:
                     break;
@@ -156,9 +152,24 @@ public class BombermanGame extends Application {
         });
     }
 
+    public void nextMap() {
+        // TODO: Clear map
+        entities.clear();
+        stillObjects.clear();
+        listBombs.clear();
+
+        // TODO: Create new map
+        currentLevel++;
+        createMap();
+    }
+
     public void createMap() {
-//        createMapFromFile("res/levels/Level1.txt");
+//        createMapFromFile("res/levels/Level" + currentLevel + ".txt");
         createMapFromFile("res/levels/test.txt");
+
+        bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
+        entities.add(bomberman);
+
         int cntBrick = 0;
         for (int i = 0; i < WIDTH; i++) {
             for (int j = 0; j < HEIGHT; j++) {
@@ -167,6 +178,7 @@ public class BombermanGame extends Application {
                 stillObjects.add(object);
                 switch (mapMatrix[j][i]) {
                     case '#':
+                        stillObjects.remove(object);
                         object = new Wall(i, j, Sprite.wall.getFxImage());
                         stillObjects.add(object);
                         break;
@@ -254,6 +266,36 @@ public class BombermanGame extends Application {
         }
     }
 
+    public static Entity getEntity(int x, int y) {
+        if (getBrick(x, y) != null) {
+            return getBrick(x, y);
+        } else {
+            for (Entity entity : entities) {
+                if (entity.getX() == x && entity.getY() == y) {
+                    return entity;
+                }
+            }
+
+            for (Entity entity : stillObjects) {
+                if (entity.getX() == x && entity.getY() == y) {
+                    return entity;
+                }
+            }
+        }
+        return new Grass(x, y, Sprite.grass.getFxImage());
+    }
+
+    public static Brick getBrick(int x, int y) {
+        for (Entity entity : stillObjects) {
+            if (entity instanceof Brick) {
+                if (entity.getX() == x && entity.getY() == y) {
+                    return (Brick) entity;
+                }
+            }
+        }
+        return null;
+    }
+
     public void update() {
 //        entities.forEach(Entity::update)
 //        listBombs.forEach(Entity::update);
@@ -271,6 +313,9 @@ public class BombermanGame extends Application {
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
         stillObjects.forEach(g -> g.render(gc));
         entities.forEach(g -> g.render(gc));
-        listBombs.forEach(g -> g.render(gc));
+
+        for (int i = 0; i < listBombs.size(); i++) {
+            listBombs.get(i).render(gc);
+        }
     }
 }

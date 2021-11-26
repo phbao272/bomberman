@@ -5,7 +5,7 @@ import java.io.File;
 import java.io.IOException;
 
 public class Audio {
-    public void playSound(String soundFile) {
+    public static void playSound(String soundFile) {
         try {
             File f = new File("./" + soundFile);
             AudioInputStream audioIn = AudioSystem.getAudioInputStream(new File(f.getAbsolutePath()));

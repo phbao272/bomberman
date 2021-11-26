@@ -2,21 +2,29 @@ package uet.oop.bomberman.entities.movable;
 
 import javafx.scene.image.Image;
 import uet.oop.bomberman.BombermanGame;
+import uet.oop.bomberman.audio.Audio;
 import uet.oop.bomberman.graphics.Sprite;
 
 public class Bomber extends Movable {
+    private int cntHearts = 3;
     public Bomber(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
     }
 
     @Override
     public void kill() {
-
+        setAlive(false);
+        Audio.playSound("res/audio/dead.wav");
+        if (cntHearts > 0) {
+            cntHearts--;
+        }
     }
 
     @Override
     public void afterKill() {
-
+        if (cntHearts > 0) {
+            setAlive(true);
+        }
     }
 
     @Override
@@ -29,13 +37,14 @@ public class Bomber extends Movable {
             this.x = this.x + speed;
         }
         step++;
-        System.out.println("Step: " + step);
         switch (step % 20) {
             case 1:
                 setImg(Sprite.player_right_1.getFxImage());
+                Audio.playSound("res/audio/walk.wav");
                 break;
             case 10:
                 setImg(Sprite.player_right_2.getFxImage());
+                Audio.playSound("res/audio/walk.wav");
                 break;
         }
 
@@ -53,9 +62,11 @@ public class Bomber extends Movable {
         switch (step % 20) {
             case 1:
                 setImg(Sprite.player_left_1.getFxImage());
+                Audio.playSound("res/audio/walk.wav");
                 break;
             case 10:
                 setImg(Sprite.player_left_2.getFxImage());
+                Audio.playSound("res/audio/walk.wav");
                 break;
         }
 
@@ -74,9 +85,11 @@ public class Bomber extends Movable {
         switch (step % 20) {
             case 1:
                 setImg(Sprite.player_up_1.getFxImage());
+                Audio.playSound("res/audio/walk.wav");
                 break;
             case 10:
                 setImg(Sprite.player_up_2.getFxImage());
+                Audio.playSound("res/audio/walk.wav");
                 break;
         }
 
@@ -95,9 +108,11 @@ public class Bomber extends Movable {
         switch (step % 20) {
             case 1:
                 setImg(Sprite.player_down_1.getFxImage());
+                Audio.playSound("res/audio/walk.wav");
                 break;
             case 10:
                 setImg(Sprite.player_down_2.getFxImage());
+                Audio.playSound("res/audio/walk.wav");
                 break;
         }
 

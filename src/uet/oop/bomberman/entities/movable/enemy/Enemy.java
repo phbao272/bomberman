@@ -14,7 +14,7 @@ public abstract class Enemy extends Movable {
     public int direction = -1;  //0 : up, 1 : right, 2 : down, 3 : left
 
     protected int points;
-    protected int speed; //Speed should change on level transition
+    protected int speed;
     protected AI ai;
     protected boolean wallPass = false;
     protected final int MAX_STEP = 30;
@@ -58,7 +58,8 @@ public abstract class Enemy extends Movable {
                             }
                         } else if (entity instanceof Bomber) {
                             if (entity.intersectDown(this)) {
-                                ((Bomber) entity).kill();
+//                                ((Bomber) entity).kill();
+                                System.out.println("Va trạm trên với enemy");
                             }
                         }
                     }
@@ -98,7 +99,8 @@ public abstract class Enemy extends Movable {
                             }
                         } else if (entity instanceof Bomber) {
                             if (entity.intersectLeft(this)) {
-                                ((Bomber) entity).kill();
+//                                ((Bomber) entity).kill();
+                                System.out.println("Va trạm phải với enemy");
                             }
                         }
                     }
@@ -137,7 +139,8 @@ public abstract class Enemy extends Movable {
                             }
                         } else if (entity instanceof Bomber) {
                             if (entity.intersectUp(this)) {
-                                ((Bomber) entity).kill();
+//                                ((Bomber) entity).kill();
+                                System.out.println("Va trạm dưới với enemy");
                             }
                         }
                     }
@@ -176,7 +179,8 @@ public abstract class Enemy extends Movable {
                             }
                         } else if (entity instanceof Bomber) {
                             if (entity.intersectRight(this)) {
-                                ((Bomber) entity).kill();
+//                                ((Bomber) entity).kill();
+                                System.out.println("Va trạm trái với enemy");
                             }
                         }
                     }
@@ -214,6 +218,5 @@ public abstract class Enemy extends Movable {
 
     @Override
     public void update() {
-
     }
 }
