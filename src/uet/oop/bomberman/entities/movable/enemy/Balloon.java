@@ -45,21 +45,21 @@ public class Balloon extends Enemy {
     @Override
     public void update() {
         if (isAlive) {
-            randomMove();
+//            randomMove();
             chooseSprite();
         }
         else {
             if (frameToDisappear > 0) {
                 switch (frameToDisappear) {
-                    case 18: {
+                    case 36: {
                         img = Sprite.balloom_dead.getFxImage();
                         break;
                     }
-                    case 12: {
+                    case 24: {
                         img = Sprite.mob_dead1.getFxImage();
                         break;
                     }
-                    case 6: {
+                    case 12: {
                         img = Sprite.mob_dead2.getFxImage();
                         break;
                     }

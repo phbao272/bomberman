@@ -58,7 +58,7 @@ public class DirectionalExplosion extends Entity {
             explosions[i] = new Explosion(xUnit, yUnit, direction, finalFlame);
         }
 
-        System.out.println("Tạo ra vụ nổ hướng " + direction + " độ dài là: " + explosions.length);
+//        System.out.println("Tạo ra vụ nổ hướng " + direction + " độ dài là: " + explosions.length);
     }
 
     // TODO: Tính toán radius có thể của mỗi hướng của vụ nổ
@@ -84,7 +84,7 @@ public class DirectionalExplosion extends Entity {
             }
 
             Entity entity = BombermanGame.getEntity(xExp, yExp);
-            System.out.println(entity);
+//            System.out.println(entity);
             if (entity instanceof Brick) {
                 ((Brick) entity).setDestroyed(true);
                 allowRadius++;

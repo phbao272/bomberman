@@ -28,7 +28,7 @@ public class BombermanGame extends Application {
 
     public int cntBomb = 1;
     private int currentLevel = 1;
-    public static int bombRadius = 10;
+    public static int bombRadius = 3;
     public int cntBrick = 0;
 
     public static GraphicsContext gc;

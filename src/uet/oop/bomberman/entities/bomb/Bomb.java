@@ -5,6 +5,8 @@ import javafx.scene.image.Image;
 import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.audio.Audio;
 import uet.oop.bomberman.entities.Entity;
+import uet.oop.bomberman.entities.movable.Bomber;
+import uet.oop.bomberman.entities.movable.Movable;
 import uet.oop.bomberman.graphics.Sprite;
 
 public class Bomb extends Entity {
@@ -29,15 +31,81 @@ public class Bomb extends Entity {
 
     public void createExplosion() {
         explosions = new DirectionalExplosion[4];
-
         for (int i = 0; i < 4; i++) {
             explosions[i] = new DirectionalExplosion(x, y, i, BombermanGame.bombRadius);
+        }
+    }
+
+    public void explosiveEffect() {
+        for (int i = 0; i < explosions.length; ++i) {
+            Explosion[] exp = explosions[i].getExplosions();
+            bombCollide(exp, i);
+        }
+    }
+    // TODO: Xét va chạm với bomb
+    // Chưa xét item flame pass
+    public void bombCollide(Explosion[] exp, int direction) {
+        if (exp.length > 0) {
+            Explosion expBegin = exp[0];
+            Explosion expEnd = exp[exp.length - 1];
+
+            switch (direction) {
+                case 0:
+                    for (Entity entity : BombermanGame.entities) {
+                        Movable movable = (Movable) entity;
+                        if (entity.getMaxY() > expEnd.getY() && entity.getMaxY() < expBegin.getMaxY() + Sprite.SCALED_SIZE + 12
+                                && (entity.getX() >= expEnd.getX() && entity.getX() < expEnd.getMaxX()
+                                || entity.getMaxX() - 18 > expEnd.getX() && entity.getMaxX() - 18 < expEnd.getMaxX())) {
+                            if (movable.isAlive()) {
+                                movable.kill();
+                            }
+                        }
+                    }
+                    break;
+                case 1:
+                    for (Entity entity : BombermanGame.entities) {
+                        Movable movable = (Movable) entity;
+                        if (entity.getX() < expEnd.getMaxX() && entity.getX() > expBegin.getX() - Sprite.SCALED_SIZE - 12
+                                && (entity.getY() >= expEnd.getY() && entity.getY() < expEnd.getMaxY()
+                                || entity.getMaxY() > expEnd.getY() && entity.getMaxY() < expEnd.getMaxY())) {
+                            if (movable.isAlive()) {
+                                movable.kill();
+                            }
+                        }
+                    }
+                    break;
+                case 2:
+                    for (Entity entity : BombermanGame.entities) {
+                        Movable movable = (Movable) entity;
+                        if (entity.getY() < expEnd.getMaxY() && entity.getY() > expBegin.getY() - Sprite.SCALED_SIZE - 12
+                                && (entity.getX() >= expEnd.getX() && entity.getX() < expEnd.getMaxX()
+                                || entity.getMaxX() > expEnd.getX() && entity.getMaxX() < expEnd.getMaxX())) {
+                            if (movable.isAlive()) {
+                                movable.kill();
+                            }
+                        }
+                    }
+                    break;
+                case 3:
+                    for (Entity entity : BombermanGame.entities) {
+                        Movable movable = (Movable) entity;
+                        if (entity.getMaxX() > expEnd.getX() && entity.getMaxX() < expBegin.getMaxX() + Sprite.SCALED_SIZE + 12
+                                && (entity.getY() >= expEnd.getY() && entity.getY() < expEnd.getMaxY()
+                                || entity.getMaxY() >= expEnd.getY() && entity.getMaxY() < expEnd.getMaxY())) {
+                            if (movable.isAlive()) {
+                                movable.kill();
+                            }
+                        }
+                    }
+                    break;
+            }
         }
     }
 
     public void exploded() {
         setExploded(true);
         createExplosion();
+        explosiveEffect();
     }
 
     @Override

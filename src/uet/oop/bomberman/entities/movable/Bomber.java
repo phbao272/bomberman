@@ -24,6 +24,8 @@ public class Bomber extends Movable {
     public void afterKill() {
         if (cntHearts > 0) {
             setAlive(true);
+        } else {
+            BombermanGame.entities.remove(this);
         }
     }
 
@@ -126,6 +128,7 @@ public class Bomber extends Movable {
     public void update() {
         // TODO: Die
         if (!isAlive) {
+            System.out.println("player die");
             if (frameToDisappear > 0) {
                 switch (frameToDisappear) {
                     case 48: {
@@ -143,7 +146,9 @@ public class Bomber extends Movable {
                 }
                 frameToDisappear--;
             } else {
-                BombermanGame.entities.remove(this);
+                afterKill();
+                frameToDisappear = 48;
+//                BombermanGame.entities.remove(this);
             }
         }
 

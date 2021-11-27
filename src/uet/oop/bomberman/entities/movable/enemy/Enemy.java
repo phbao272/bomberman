@@ -33,7 +33,7 @@ public abstract class Enemy extends Movable {
 
     @Override
     public void kill() {
-        
+        setAlive(false);
     }
 
     @Override
