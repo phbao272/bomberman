@@ -9,6 +9,9 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
 import uet.oop.bomberman.audio.Audio;
 import uet.oop.bomberman.entities.*;
+import uet.oop.bomberman.entities.PowerUps.Bombs;
+import uet.oop.bomberman.entities.PowerUps.Flames;
+import uet.oop.bomberman.entities.PowerUps.Speed;
 import uet.oop.bomberman.entities.bomb.Bomb;
 import uet.oop.bomberman.entities.movable.Bomber;
 import uet.oop.bomberman.entities.movable.Movable;
@@ -30,7 +33,9 @@ public class BombermanGame extends Application {
 
     public int cntBomb = 1;
     private int currentLevel = 1;
-    public static int bombRadius = 3;
+    public static int NumberofBombs = 1;
+    public static int bombRadius = 1;
+
     public int cntBrick = 0;
 
     public static GraphicsContext gc;
@@ -80,7 +85,6 @@ public class BombermanGame extends Application {
         setKeyListener(scene);
         createMap();
 
-        myAudio.playSound("res/audio/background_music.wav");
 
     }
 
@@ -110,7 +114,7 @@ public class BombermanGame extends Application {
                 case K:
                     // TODO: Test player die
                     bomberman.setAlive(false);
-                    myAudio.playSound("res/audio/dead.wav");
+                    myAudio.playSound("res/audio/dead.wav", 0);
                     break;
                 case N:
                     // TODO: Test next level
@@ -129,13 +133,13 @@ public class BombermanGame extends Application {
                     }
                     break;
                 case SPACE:
-                    if (listBombs.size() < 3) {
+                    if (listBombs.size() < NumberofBombs) {
                         int xTilePlayer = bomberman.getTileX();
                         int yTilePlayer = bomberman.getTileY();
 
                         Bomb bomb = new Bomb(xTilePlayer, yTilePlayer, Sprite.bomb.getFxImage());
                         listBombs.add(bomb);
-                        myAudio.playSound("res/audio/place_bomb.wav");
+                        myAudio.playSound("res/audio/place_bomb.wav", 0);
                         System.out.println("Đặt bom bùm bùm...");
                     }
                     break;
@@ -222,6 +226,27 @@ public class BombermanGame extends Application {
                     case '5' :
                         object = new Kondoria(i, j, Sprite.kondoria_left1.getFxImage());
                         entities.add(object);
+                        break;
+                    case 'b':
+                        object = new Bombs(i, j, Sprite.powerup_bombs.getFxImage());
+                        stillObjects.add(object);
+                        object = new Brick(i, j, Sprite.brick.getFxImage());
+                        stillObjects.add(object);
+                        cntBrick++;
+                        break;
+                    case 'f':
+                        object = new Flames(i, j, Sprite.powerup_flames.getFxImage());
+                        stillObjects.add(object);
+                        object = new Brick(i, j, Sprite.brick.getFxImage());
+                        stillObjects.add(object);
+                        cntBrick++;
+                        break;
+                    case 's':
+                        object = new Speed(i, j, Sprite.powerup_speed.getFxImage());
+                        stillObjects.add(object);
+                        object = new Brick(i, j, Sprite.brick.getFxImage());
+                        stillObjects.add(object);
+                        cntBrick++;
                         break;
                 }
             }
