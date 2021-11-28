@@ -28,6 +28,10 @@ public abstract class Movable extends Entity {
         this.step = step;
     }
 
+    public void setSpeed() {
+        speed += 2;
+    }
+
     public boolean isMoving() {
         return isMoving;
     }

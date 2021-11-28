@@ -14,7 +14,7 @@ public class Bomber extends Movable {
     @Override
     public void kill() {
         setAlive(false);
-        Audio.playSound("res/audio/dead.wav");
+        Audio.playSound("res/audio/dead.wav", 0);
         if (cntHearts > 0) {
             cntHearts--;
         }
@@ -42,11 +42,11 @@ public class Bomber extends Movable {
         switch (step % 20) {
             case 1:
                 setImg(Sprite.player_right_1.getFxImage());
-                Audio.playSound("res/audio/walk.wav");
+                Audio.playSound("res/audio/walk.wav", 0);
                 break;
             case 10:
                 setImg(Sprite.player_right_2.getFxImage());
-                Audio.playSound("res/audio/walk.wav");
+                Audio.playSound("res/audio/walk.wav", 0);
                 break;
         }
 
@@ -64,11 +64,11 @@ public class Bomber extends Movable {
         switch (step % 20) {
             case 1:
                 setImg(Sprite.player_left_1.getFxImage());
-                Audio.playSound("res/audio/walk.wav");
+                Audio.playSound("res/audio/walk.wav", 0);
                 break;
             case 10:
                 setImg(Sprite.player_left_2.getFxImage());
-                Audio.playSound("res/audio/walk.wav");
+                Audio.playSound("res/audio/walk.wav", 0);
                 break;
         }
 
@@ -87,11 +87,11 @@ public class Bomber extends Movable {
         switch (step % 20) {
             case 1:
                 setImg(Sprite.player_up_1.getFxImage());
-                Audio.playSound("res/audio/walk.wav");
+                Audio.playSound("res/audio/walk.wav", 0);
                 break;
             case 10:
                 setImg(Sprite.player_up_2.getFxImage());
-                Audio.playSound("res/audio/walk.wav");
+                Audio.playSound("res/audio/walk.wav", 0);
                 break;
         }
 
@@ -110,11 +110,11 @@ public class Bomber extends Movable {
         switch (step % 20) {
             case 1:
                 setImg(Sprite.player_down_1.getFxImage());
-                Audio.playSound("res/audio/walk.wav");
+                Audio.playSound("res/audio/walk.wav", 0);
                 break;
             case 10:
                 setImg(Sprite.player_down_2.getFxImage());
-                Audio.playSound("res/audio/walk.wav");
+                Audio.playSound("res/audio/walk.wav", 0);
                 break;
         }
 

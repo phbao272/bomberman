@@ -113,7 +113,7 @@ public class Bomb extends Entity {
         if (isExploded) {
             if (frameToDisappear == 12) {
                 System.out.println("Bom đã nổ");
-                Audio.playSound("res/audio/explosion.wav");
+                Audio.playSound("res/audio/explosion.wav", 0);
             }
 
             img = Sprite.bomb_exploded2.getFxImage();

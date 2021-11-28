@@ -5,6 +5,8 @@ import javafx.scene.image.Image;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.level.Coordinates;
 
+import java.util.Objects;
+
 public abstract class Entity {
     //Tọa độ X tính từ góc trái trên trong Canvas
     protected int x;
@@ -49,6 +51,14 @@ public abstract class Entity {
         return Coordinates.pixelToTile(y + Sprite.SCALED_SIZE / 2);
     }
 
+    public void setX(int x) {
+        this.x = x;
+    }
+
+    public void setY(int y) {
+        this.y = y;
+    }
+
     public boolean intersectLeft(Entity other) {
         // TODO: Kiểm tra xem có vật giao nhau bên trái
         boolean impactX = (this.getX() == other.getMaxX());
@@ -85,6 +95,14 @@ public abstract class Entity {
         return impactY && intersectX;
     }
 
+    public boolean intersect(Entity other){
+        if (intersectUp(other) || intersectDown(other)
+                || intersectLeft(other) || intersectRight(other)) {
+            return true;
+        }
+        return false;
+    }
+
     public void setImg(Image img) {
         this.img = img;
     }
@@ -94,4 +112,6 @@ public abstract class Entity {
     }
 
     public abstract void update();
+
+
 }
