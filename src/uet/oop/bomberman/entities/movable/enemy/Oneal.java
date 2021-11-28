@@ -3,13 +3,15 @@ package uet.oop.bomberman.entities.movable.enemy;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.entities.Entity;
+import uet.oop.bomberman.entities.movable.Bomber;
 import uet.oop.bomberman.entities.movable.enemy.ai.AILow;
+import uet.oop.bomberman.entities.movable.enemy.ai.AIMedium;
 import uet.oop.bomberman.graphics.Sprite;
 
 public class Oneal extends Enemy {
     public Oneal(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img, 2, 100);
-        ai = new AILow();
+        ai = new AIMedium(Bomber.getInstance(), this);
         direction = ai.calculateDirection();
     }
 
@@ -46,7 +48,7 @@ public class Oneal extends Enemy {
     @Override
     public void update() {
         if (isAlive) {
-            randomMove();
+//            randomMove();
             chooseSprite();
         }
         else {

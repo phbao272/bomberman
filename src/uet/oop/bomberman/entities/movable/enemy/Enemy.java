@@ -9,6 +9,7 @@ import uet.oop.bomberman.entities.bomb.Bomb;
 import uet.oop.bomberman.entities.movable.Bomber;
 import uet.oop.bomberman.entities.movable.Movable;
 import uet.oop.bomberman.entities.movable.enemy.ai.AI;
+import uet.oop.bomberman.entities.movable.enemy.ai.AIMedium;
 
 public abstract class Enemy extends Movable {
     public int direction = -1;  //0 : up, 1 : right, 2 : down, 3 : left
@@ -17,8 +18,9 @@ public abstract class Enemy extends Movable {
     protected int speed;
     protected AI ai;
     protected boolean wallPass = false;
-    protected final int MAX_STEP = 30;
+    protected final int MAX_STEP = 100;
     protected Image deadImg;
+    private final int allowDistance = 12;
 
     public Enemy(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
@@ -52,29 +54,10 @@ public abstract class Enemy extends Movable {
                 case 0: {
                     for (Entity entity : BombermanGame.entities) {
                         if (!(entity instanceof Bomber || entity instanceof Enemy)) {
-                            if (entity.intersectDown(this)) {
-                                direction = ai.calculateDirection();
-                                return;
-                            }
+                            if (EnemyUp(entity)) return;
                         } else if (entity instanceof Bomber) {
                             if (entity.intersectDown(this)) {
-//                                ((Bomber) entity).kill();
-                                System.out.println("Va trạm trên với enemy");
-                            }
-                        }
-                    }
-                    for (Entity entity : BombermanGame.stillObjects) {
-                        if (entity instanceof Brick) {
-                            if (!wallPass) {
-                                if (entity.intersectDown(this)) {
-                                    direction = ai.calculateDirection();
-                                    return;
-                                }
-                            }
-                        } else if (!(entity instanceof Grass)) {
-                            if (entity.intersectDown(this)) {
-                                direction = ai.calculateDirection();
-                                return;
+                                ((Bomber) entity).kill();
                             }
                         }
                     }
@@ -86,79 +69,83 @@ public abstract class Enemy extends Movable {
                         }
                     }
 
-                    this.y = this.y - speed;
+                    for (Entity entity : BombermanGame.stillObjects) {
+                        if (entity instanceof Brick) {
+                            if (!wallPass) {
+                                if (EnemyUp(entity)) return;
+                            }
+                        }
+                        else if (!(entity instanceof Grass)) {
+                            if (EnemyUp(entity)) return;
+                        }
+                    }
+
+                    if (ai instanceof AIMedium) {
+                        if (step > MAX_STEP) {
+                            step = 0;
+                            System.out.println("Het Max Step");
+                            direction = ai.calculateDirection();
+                            return;
+                        }
+                    }
+
+                    y -= speed;
                     chooseSprite();
                     break;
                 }
                 case 1: {
                     for (Entity entity : BombermanGame.entities) {
                         if (!(entity instanceof Bomber || entity instanceof Enemy)) {
-                            if (entity.intersectLeft(this)) {
-                                direction = ai.calculateDirection();
-                                return;
-                            }
+                            if (EnemyRight(entity)) return;
                         } else if (entity instanceof Bomber) {
                             if (entity.intersectLeft(this)) {
-//                                ((Bomber) entity).kill();
-                                System.out.println("Va trạm phải với enemy");
+                                ((Bomber) entity).kill();
                             }
                         }
                     }
-                    for (Entity entity : BombermanGame.stillObjects) {
-                        if (entity instanceof Brick) {
-                            if (!wallPass) {
-                                if (entity.intersectLeft(this)) {
-                                    direction = ai.calculateDirection();
-                                    return;
-                                }
-                            }
-                        } else if (!(entity instanceof Grass)) {
-                            if (entity.intersectLeft(this)) {
-                                direction = ai.calculateDirection();
-                                return;
-                            }
-                        }
-                    }
+
                     for (Bomb bomb : BombermanGame.listBombs) {
                         if (bomb.intersectLeft(this)) {
+                            System.out.println("Het Max Step");
                             direction = ai.calculateDirection();
                             return;
                         }
                     }
 
-                    this.x = this.x + speed;
+                    for (Entity entity : BombermanGame.stillObjects) {
+                        if (entity instanceof Brick) {
+                            if (!wallPass) {
+                                if (EnemyRight(entity)) return;
+                            }
+                        }
+                        else if (!(entity instanceof Grass)) {
+                            if (EnemyRight(entity)) return;
+                        }
+                    }
+
+                    if (ai instanceof AIMedium) {
+                        if (step > MAX_STEP) {
+                            step = 0;
+                            direction = ai.calculateDirection();
+                            return;
+                        }
+                    }
+
+                    x += speed;
                     chooseSprite();
                     break;
                 }
                 case 2: {
                     for (Entity entity : BombermanGame.entities) {
                         if (!(entity instanceof Bomber || entity instanceof Enemy)) {
-                            if (entity.intersectUp(this)) {
-                                direction = ai.calculateDirection();
-                                return;
-                            }
+                            if (EnemyDown(entity)) return;
                         } else if (entity instanceof Bomber) {
                             if (entity.intersectUp(this)) {
-//                                ((Bomber) entity).kill();
-                                System.out.println("Va trạm dưới với enemy");
+                                ((Bomber) entity).kill();
                             }
                         }
                     }
-                    for (Entity entity : BombermanGame.stillObjects) {
-                        if (entity instanceof Brick) {
-                            if (!wallPass) {
-                                if (entity.intersectUp(this)) {
-                                    direction = ai.calculateDirection();
-                                    return;
-                                }
-                            }
-                        } else if (!(entity instanceof Grass)) {
-                            if (entity.intersectUp(this)) {
-                                direction = ai.calculateDirection();
-                                return;
-                            }
-                        }
-                    }
+
                     for (Bomb bomb : BombermanGame.listBombs) {
                         if (bomb.intersectUp(this)) {
                             direction = ai.calculateDirection();
@@ -166,39 +153,41 @@ public abstract class Enemy extends Movable {
                         }
                     }
 
-                    this.y = this.y + speed;
+                    for (Entity entity : BombermanGame.stillObjects) {
+                        if (entity instanceof Brick) {
+                            if (!wallPass) {
+                                if (EnemyDown(entity)) return;
+                            }
+                        }
+                        else if (!(entity instanceof Grass)) {
+                            if (EnemyDown(entity)) return;
+                        }
+                    }
+
+                    if (ai instanceof AIMedium) {
+                        if (step > MAX_STEP) {
+                            step = 0;
+                            System.out.println("Het Max Step");
+                            direction = ai.calculateDirection();
+                            return;
+                        }
+                    }
+
+                    y += speed;
                     chooseSprite();
                     break;
                 }
                 case 3: {
                     for (Entity entity : BombermanGame.entities) {
                         if (!(entity instanceof Bomber || entity instanceof Enemy)) {
-                            if (entity.intersectRight(this)) {
-                                direction = ai.calculateDirection();
-                                return;
-                            }
+                            if (EnemyLeft(entity)) return;
                         } else if (entity instanceof Bomber) {
                             if (entity.intersectRight(this)) {
-//                                ((Bomber) entity).kill();
-                                System.out.println("Va trạm trái với enemy");
+                                ((Bomber) entity).kill();
                             }
                         }
                     }
-                    for (Entity entity : BombermanGame.stillObjects) {
-                        if (entity instanceof Brick) {
-                            if (!wallPass) {
-                                if (entity.intersectRight(this)) {
-                                    direction = ai.calculateDirection();
-                                    return;
-                                }
-                            }
-                        } else if (!(entity instanceof Grass)) {
-                            if (entity.intersectRight(this)) {
-                                direction = ai.calculateDirection();
-                                return;
-                            }
-                        }
-                    }
+
                     for (Bomb bomb : BombermanGame.listBombs) {
                         if (bomb.intersectRight(this)) {
                             direction = ai.calculateDirection();
@@ -206,12 +195,88 @@ public abstract class Enemy extends Movable {
                         }
                     }
 
-                    this.x = this.x - speed;
+                    for (Entity entity : BombermanGame.stillObjects) {
+                        if (entity instanceof Brick) {
+                            if (!wallPass) {
+                                if (EnemyLeft(entity)) return;
+                            }
+                        }
+                        else if (!(entity instanceof Grass)) {
+                            if (EnemyLeft(entity)) return;
+                        }
+                    }
+
+                    if (ai instanceof AIMedium) {
+                        if (step > MAX_STEP) {
+                            step = 0;
+                            System.out.println("Het Max Step");
+                            direction = ai.calculateDirection();
+                            return;
+                        }
+                    }
+
+                    x -= speed;
                     chooseSprite();
                     break;
                 }
             }
         }
+    }
+
+    private boolean EnemyLeft(Entity entity) {
+        if (entity.intersectRight(this)) {
+            if (entity.getMaxY() - getY() <= allowDistance) {
+                y += entity.getMaxY() - getY();
+            }
+            if (getMaxY() - entity.getY() <= allowDistance) {
+                y -= getMaxY() - entity.getY();
+            }
+            direction = ai.calculateDirection();
+            return true;
+        }
+        return false;
+    }
+
+    private boolean EnemyUp(Entity entity) {
+        if (entity.intersectDown(this)) {
+            if (entity.getMaxX() - getX() <= allowDistance) {
+                x += entity.getMaxX() - getX();
+            }
+            if (getMaxX() - entity.getX() <= allowDistance + 10) {
+                x -= getMaxX() - entity.getX();
+            }
+            direction = ai.calculateDirection();
+            return true;
+        }
+        return false;
+    }
+
+    private boolean EnemyDown(Entity entity) {
+        if (entity.intersectUp(this)) {
+            if (getMaxX() - entity.getX() <= allowDistance + 10) {
+                x -= getMaxX() - entity.getX();
+            }
+            if (entity.getMaxX() - getX() <= allowDistance) {
+                x += entity.getMaxX() - getX();
+            }
+            direction = ai.calculateDirection();
+            return true;
+        }
+        return false;
+    }
+
+    private boolean EnemyRight(Entity entity) {
+        if (entity.intersectLeft(this)) {
+            if (getMaxY() - entity.getY() <= allowDistance) {
+                y -= getMaxY() - entity.getY();
+            }
+            if (entity.getMaxY() - getY() <= allowDistance) {
+                y += entity.getMaxY() - getY();
+            }
+            direction = ai.calculateDirection();
+            return true;
+        }
+        return false;
     }
 
     public abstract void chooseSprite();
