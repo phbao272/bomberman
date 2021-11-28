@@ -15,6 +15,7 @@ public abstract class Movable extends Entity {
     protected boolean isAlive = true;
     protected String lastDirection = "RIGHT";
     protected int frameToDisappear = 48;
+    protected boolean wallPass = false;
 
     public Movable(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
@@ -58,7 +59,7 @@ public abstract class Movable extends Entity {
 
     public boolean canMoveRight() {
         for (Entity entity : BombermanGame.stillObjects) {
-            if (entity instanceof Wall || entity instanceof Brick) {
+            if (entity instanceof Wall || (entity instanceof Brick && !wallPass)) {
                 if (entity.intersectLeft(this)) {
                     if (getMaxY() - entity.getY() <= allowDistance) {
                         y -= getMaxY() - entity.getY();
@@ -82,7 +83,7 @@ public abstract class Movable extends Entity {
 
     public boolean canMoveLeft() {
         for (Entity entity : BombermanGame.stillObjects) {
-            if (entity instanceof Wall || entity instanceof Brick) {
+            if (entity instanceof Wall || (entity instanceof Brick && !wallPass)) {
                 if (entity.intersectRight(this)) {
                     if (getMaxY() - entity.getY() <= allowDistance) {
                         y -= getMaxY() - entity.getY();
@@ -106,7 +107,7 @@ public abstract class Movable extends Entity {
 
     public boolean canMoveUp() {
         for (Entity entity : BombermanGame.stillObjects) {
-            if (entity instanceof Wall || entity instanceof Brick) {
+            if (entity instanceof Wall || (entity instanceof Brick)) {
                 if (entity.intersectDown(this)) {
                     if (getMaxX() - entity.getX() <= allowDistance) {
                         x -= getMaxX() - entity.getX();
@@ -130,7 +131,7 @@ public abstract class Movable extends Entity {
 
     public boolean canMoveDown() {
         for (Entity entity : BombermanGame.stillObjects) {
-            if (entity instanceof Wall || entity instanceof Brick) {
+            if (entity instanceof Wall || (entity instanceof Brick && !wallPass)) {
                 if (entity.intersectUp(this)) {
                     if (getMaxX() - entity.getX() <= allowDistance) {
                         x -= getMaxX() - entity.getX();

@@ -14,6 +14,7 @@ import uet.oop.bomberman.entities.PowerUps.Flames;
 import uet.oop.bomberman.entities.PowerUps.Speed;
 import uet.oop.bomberman.entities.bomb.Bomb;
 import uet.oop.bomberman.entities.movable.Bomber;
+import uet.oop.bomberman.entities.movable.Movable;
 import uet.oop.bomberman.entities.movable.enemy.*;
 import uet.oop.bomberman.graphics.Sprite;
 
@@ -22,6 +23,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class BombermanGame extends Application {
@@ -39,6 +41,7 @@ public class BombermanGame extends Application {
     public static GraphicsContext gc;
     private Canvas canvas;
 
+    public static List<Movable> _mobs = new ArrayList<Movable>();
     public static List<Entity> entities = new ArrayList<>();
     public static List<Entity> stillObjects = new ArrayList<>();
     public static List<Bomb> listBombs = new ArrayList<>();
@@ -81,7 +84,6 @@ public class BombermanGame extends Application {
         timer.start();
         setKeyListener(scene);
         createMap();
-
 
 
     }
@@ -186,6 +188,7 @@ public class BombermanGame extends Application {
 
         bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
         entities.add(bomberman);
+        _mobs.add(bomberman);
 
 
         for (int i = 0; i < WIDTH; i++) {
@@ -334,6 +337,20 @@ public class BombermanGame extends Application {
         return null;
     }
 
+    public static Bomber getPlayer() {
+        Iterator<Movable> itr = _mobs.iterator();
+
+        Movable cur;
+        while(itr.hasNext()) {
+            cur = itr.next();
+
+            if(cur instanceof Bomber)
+                return (Bomber) cur;
+        }
+
+        return null;
+    }
+
     public void update() {
 //        entities.forEach(Entity::update)
 //        listBombs.forEach(Entity::update);
@@ -344,6 +361,11 @@ public class BombermanGame extends Application {
 
         for (int i = 0; i < listBombs.size(); i++) {
             listBombs.get(i).update();
+        }
+
+        for (int i = 0; i < _mobs.size(); i++) {
+            Movable a = _mobs.get(i);
+            if(((Entity)a).isRemoved()) _mobs.remove(i);
         }
     }
 

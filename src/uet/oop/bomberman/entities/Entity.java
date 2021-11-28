@@ -16,6 +16,8 @@ public abstract class Entity {
 
     protected Image img;
 
+    protected boolean removed = false;
+
     //Khởi tạo đối tượng, chuyển từ tọa độ đơn vị sang tọa độ trong canvas
     public Entity(int xUnit, int yUnit, Image img) {
         this.x = xUnit * Sprite.SCALED_SIZE;
@@ -105,6 +107,10 @@ public abstract class Entity {
 
     public void setImg(Image img) {
         this.img = img;
+    }
+
+    public boolean isRemoved() {
+        return removed;
     }
 
     public void render(GraphicsContext gc) {

@@ -7,8 +7,15 @@ import uet.oop.bomberman.graphics.Sprite;
 
 public class Bomber extends Movable {
     private int cntHearts = 3;
+    private static final Bomber INSTANCE = new Bomber(1, 1, Sprite.player_right.getFxImage());
     public Bomber(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
+    }
+
+    public static Bomber getInstance() {
+        INSTANCE.x = BombermanGame.bomberman.x;
+        INSTANCE.y = BombermanGame.bomberman.y;
+        return INSTANCE;
     }
 
     @Override
