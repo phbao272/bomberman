@@ -82,7 +82,7 @@ public class BombermanGame extends Application {
         setKeyListener(scene);
         createMap();
 
-//        myAudio.playSound("res/audio/background_music.wav", 5);
+
 
     }
 
