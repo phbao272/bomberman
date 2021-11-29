@@ -14,21 +14,19 @@ import uet.oop.bomberman.entities.movable.enemy.ai.AIMedium;
 public abstract class Enemy extends Movable {
     public int direction = -1;  //0 : up, 1 : right, 2 : down, 3 : left
 
-    protected int points;
     protected int speed;
     protected AI ai;
     protected boolean wallPass = false;
-    protected final int MAX_STEP = 100;
+    protected final int MAX_STEP = 30;
     protected Image deadImg;
-    private final int allowDistance = 12;
+    private final int allowDistance = 18;
 
     public Enemy(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
     }
 
-    public Enemy(int x, int y, Image dead, int speed, int points) {
+    public Enemy(int x, int y, Image dead, int speed) {
         super(x, y, dead);
-        this.points = points;
         this.speed = speed;
         this.deadImg = dead;
     }
@@ -57,7 +55,7 @@ public abstract class Enemy extends Movable {
                             if (EnemyUp(entity)) return;
                         } else if (entity instanceof Bomber) {
                             if (entity.intersectDown(this)) {
-                                ((Bomber) entity).kill();
+//                                ((Bomber) entity).kill();
                             }
                         }
                     }
@@ -83,7 +81,6 @@ public abstract class Enemy extends Movable {
                     if (ai instanceof AIMedium) {
                         if (step > MAX_STEP) {
                             step = 0;
-                            System.out.println("Het Max Step");
                             direction = ai.calculateDirection();
                             return;
                         }
@@ -99,7 +96,7 @@ public abstract class Enemy extends Movable {
                             if (EnemyRight(entity)) return;
                         } else if (entity instanceof Bomber) {
                             if (entity.intersectLeft(this)) {
-                                ((Bomber) entity).kill();
+//                                ((Bomber) entity).kill();
                             }
                         }
                     }
@@ -141,7 +138,7 @@ public abstract class Enemy extends Movable {
                             if (EnemyDown(entity)) return;
                         } else if (entity instanceof Bomber) {
                             if (entity.intersectUp(this)) {
-                                ((Bomber) entity).kill();
+//                                ((Bomber) entity).kill();
                             }
                         }
                     }
@@ -167,7 +164,6 @@ public abstract class Enemy extends Movable {
                     if (ai instanceof AIMedium) {
                         if (step > MAX_STEP) {
                             step = 0;
-                            System.out.println("Het Max Step");
                             direction = ai.calculateDirection();
                             return;
                         }
@@ -183,7 +179,7 @@ public abstract class Enemy extends Movable {
                             if (EnemyLeft(entity)) return;
                         } else if (entity instanceof Bomber) {
                             if (entity.intersectRight(this)) {
-                                ((Bomber) entity).kill();
+//                                ((Bomber) entity).kill();
                             }
                         }
                     }
@@ -209,7 +205,6 @@ public abstract class Enemy extends Movable {
                     if (ai instanceof AIMedium) {
                         if (step > MAX_STEP) {
                             step = 0;
-                            System.out.println("Het Max Step");
                             direction = ai.calculateDirection();
                             return;
                         }

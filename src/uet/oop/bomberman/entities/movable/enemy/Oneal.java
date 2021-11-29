@@ -10,14 +10,14 @@ import uet.oop.bomberman.graphics.Sprite;
 
 public class Oneal extends Enemy {
     public Oneal(int xUnit, int yUnit, Image img) {
-        super(xUnit, yUnit, img, 2, 100);
-        ai = new AIMedium(Bomber.getInstance(), this);
+        super(xUnit, yUnit, img, 2);
+        ai = new AIMedium(BombermanGame.getPlayer(), this);
         direction = ai.calculateDirection();
     }
 
     @Override
     public void chooseSprite() {
-        switch (step % MAX_STEP) {
+        switch (step % 30) {
             case 0: {
                 if (direction == 0 || direction == 1) {
                     img = Sprite.oneal_right1.getFxImage();
@@ -48,21 +48,21 @@ public class Oneal extends Enemy {
     @Override
     public void update() {
         if (isAlive) {
-//            randomMove();
+            randomMove();
             chooseSprite();
         }
         else {
             if (frameToDisappear > 0) {
                 switch (frameToDisappear) {
-                    case 18: {
+                    case 36: {
                         img = Sprite.oneal_dead.getFxImage();
                         break;
                     }
-                    case 12: {
+                    case 24: {
                         img = Sprite.mob_dead1.getFxImage();
                         break;
                     }
-                    case 6: {
+                    case 12: {
                         img = Sprite.mob_dead2.getFxImage();
                         break;
                     }

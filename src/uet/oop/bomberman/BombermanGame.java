@@ -183,8 +183,8 @@ public class BombermanGame extends Application {
     }
 
     public void createMap() {
-//        createMapFromFile("res/levels/Level" + currentLevel + ".txt");
-        createMapFromFile("res/levels/test.txt");
+        createMapFromFile("res/levels/Level" + currentLevel + ".txt");
+//        createMapFromFile("res/levels/test.txt");
 
         bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
         entities.add(bomberman);

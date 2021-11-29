@@ -7,14 +7,14 @@ import uet.oop.bomberman.graphics.Sprite;
 
 public class Balloon extends Enemy {
     public Balloon(int xUnit, int yUnit, Image img) {
-        super(xUnit, yUnit, img, 1, 100);
+        super(xUnit, yUnit, img, 1);
         ai = new AILow();
         direction = ai.calculateDirection();
     }
 
     @Override
     public void chooseSprite() {
-        switch (step % MAX_STEP) {
+        switch (step % 30) {
             case 0: {
                 if (direction == 0 || direction == 1) {
                     img = Sprite.balloom_right1.getFxImage();
@@ -45,10 +45,9 @@ public class Balloon extends Enemy {
     @Override
     public void update() {
         if (isAlive) {
-//            randomMove();
+            randomMove();
             chooseSprite();
-        }
-        else {
+        } else {
             if (frameToDisappear > 0) {
                 switch (frameToDisappear) {
                     case 36: {

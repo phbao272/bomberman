@@ -91,7 +91,7 @@ public class Bomb extends Entity {
                         Movable movable = (Movable) entity;
                         if (entity.getMaxX() > expEnd.getX() && entity.getMaxX() < expBegin.getMaxX() + Sprite.SCALED_SIZE + 12
                                 && (entity.getY() >= expEnd.getY() && entity.getY() < expEnd.getMaxY()
-                                || entity.getMaxY() >= expEnd.getY() && entity.getMaxY() < expEnd.getMaxY())) {
+                                || entity.getMaxY() > expEnd.getY() && entity.getMaxY() < expEnd.getMaxY())) {
                             if (movable.isAlive()) {
                                 movable.kill();
                             }
