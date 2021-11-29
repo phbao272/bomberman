@@ -5,8 +5,6 @@ import javafx.scene.image.Image;
 import uet.oop.bomberman.graphics.Sprite;
 import uet.oop.bomberman.level.Coordinates;
 
-import java.util.Objects;
-
 public abstract class Entity {
     //Tọa độ X tính từ góc trái trên trong Canvas
     protected int x;

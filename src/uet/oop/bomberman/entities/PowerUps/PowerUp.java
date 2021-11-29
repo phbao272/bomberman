@@ -4,8 +4,6 @@ import javafx.scene.image.Image;
 import uet.oop.bomberman.audio.Audio;
 import uet.oop.bomberman.entities.Entity;
 
-import java.util.Objects;
-
 public abstract class PowerUp extends Entity {
     public Audio myAudio = new Audio();
     private  boolean Active = false;

@@ -31,9 +31,8 @@ public class BombermanGame extends Application {
     public static final int WIDTH = 31;
     public static final int HEIGHT = 13;
 
-    public int cntBomb = 1;
     private int currentLevel = 1;
-    public static int NumberofBombs = 1;
+    public static int numberOfBombs = 1;
     public static int bombRadius = 1;
 
     public int cntBrick = 0;
@@ -133,7 +132,7 @@ public class BombermanGame extends Application {
                     }
                     break;
                 case SPACE:
-                    if (listBombs.size() < NumberofBombs) {
+                    if (listBombs.size() < numberOfBombs) {
                         int xTilePlayer = bomberman.getTileX();
                         int yTilePlayer = bomberman.getTileY();
 
@@ -183,8 +182,8 @@ public class BombermanGame extends Application {
     }
 
     public void createMap() {
-        createMapFromFile("res/levels/Level" + currentLevel + ".txt");
-//        createMapFromFile("res/levels/test.txt");
+//        createMapFromFile("res/levels/Level" + currentLevel + ".txt");
+        createMapFromFile("res/levels/test.txt");
 
         bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
         entities.add(bomberman);
