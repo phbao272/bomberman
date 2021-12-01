@@ -24,9 +24,9 @@ public class Speed extends PowerUp{
         for (Entity entity : BombermanGame.entities) {
             if (entity instanceof Bomber) {
                 if (entity.intersect(this) && this.isActive()) {
-                    BombermanGame.bomberman.setSpeed();
+                    BombermanGame.bomberman.setSpeed(BombermanGame.bomberman.getSpeed() + 2);
                     myAudio.playSound("res/audio/power_up.wav", 0);
-                    System.out.println("Speed + 2");
+                    System.out.println("Speed: " + BombermanGame.bomberman.getSpeed());
                     BombermanGame.stillObjects.remove(this);
                 }
             }

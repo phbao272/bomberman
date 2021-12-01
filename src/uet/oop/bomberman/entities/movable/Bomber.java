@@ -7,6 +7,8 @@ import uet.oop.bomberman.graphics.Sprite;
 
 public class Bomber extends Movable {
     private int cntHearts = 3;
+    private boolean gameOver = false;
+
     public Bomber(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
     }
@@ -25,8 +27,21 @@ public class Bomber extends Movable {
         if (cntHearts > 0) {
             setAlive(true);
         } else {
+            setGameOver(true);
             BombermanGame.entities.remove(this);
         }
+    }
+
+    public int getCntHearts() {
+        return cntHearts;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
     }
 
     @Override
@@ -128,7 +143,6 @@ public class Bomber extends Movable {
     public void update() {
         // TODO: Die
         if (!isAlive) {
-            System.out.println("player die");
             if (frameToDisappear > 0) {
                 switch (frameToDisappear) {
                     case 48: {

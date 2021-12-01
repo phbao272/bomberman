@@ -5,6 +5,7 @@ import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.entities.Brick;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.Grass;
+import uet.oop.bomberman.entities.PowerUps.PowerUp;
 import uet.oop.bomberman.entities.bomb.Bomb;
 import uet.oop.bomberman.entities.movable.Bomber;
 import uet.oop.bomberman.entities.movable.Movable;
@@ -17,8 +18,7 @@ public abstract class Enemy extends Movable {
     protected int speed;
     protected AI ai;
     protected boolean wallPass = false;
-    protected final int MAX_STEP = 30;
-    protected Image deadImg;
+    protected final int MAX_STEP = 90;
     private final int allowDistance = 18;
 
     public Enemy(int xUnit, int yUnit, Image img) {
@@ -28,7 +28,6 @@ public abstract class Enemy extends Movable {
     public Enemy(int x, int y, Image dead, int speed) {
         super(x, y, dead);
         this.speed = speed;
-        this.deadImg = dead;
     }
 
     @Override
@@ -68,7 +67,7 @@ public abstract class Enemy extends Movable {
                     }
 
                     for (Entity entity : BombermanGame.stillObjects) {
-                        if (entity instanceof Brick) {
+                        if (entity instanceof Brick || entity instanceof PowerUp) {
                             if (!wallPass) {
                                 if (EnemyUp(entity)) return;
                             }
@@ -110,7 +109,7 @@ public abstract class Enemy extends Movable {
                     }
 
                     for (Entity entity : BombermanGame.stillObjects) {
-                        if (entity instanceof Brick) {
+                        if (entity instanceof Brick || entity instanceof PowerUp) {
                             if (!wallPass) {
                                 if (EnemyRight(entity)) return;
                             }
@@ -151,7 +150,7 @@ public abstract class Enemy extends Movable {
                     }
 
                     for (Entity entity : BombermanGame.stillObjects) {
-                        if (entity instanceof Brick) {
+                        if (entity instanceof Brick || entity instanceof PowerUp) {
                             if (!wallPass) {
                                 if (EnemyDown(entity)) return;
                             }
@@ -192,7 +191,7 @@ public abstract class Enemy extends Movable {
                     }
 
                     for (Entity entity : BombermanGame.stillObjects) {
-                        if (entity instanceof Brick) {
+                        if (entity instanceof Brick || entity instanceof PowerUp) {
                             if (!wallPass) {
                                 if (EnemyLeft(entity)) return;
                             }

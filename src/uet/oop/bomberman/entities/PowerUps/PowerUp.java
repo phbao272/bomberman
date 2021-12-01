@@ -13,7 +13,6 @@ public abstract class PowerUp extends Entity {
         super(x, y, img);
     }
 
-
     public void setCollected(boolean collected) {
         this.isCollected = collected;
     }
