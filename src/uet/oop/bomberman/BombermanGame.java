@@ -6,19 +6,12 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import uet.oop.bomberman.audio.Audio;
-import uet.oop.bomberman.entities.Brick;
-import uet.oop.bomberman.entities.Entity;
-import uet.oop.bomberman.entities.Grass;
+import uet.oop.bomberman.entities.*;
 import uet.oop.bomberman.entities.PowerUps.Bombs;
 import uet.oop.bomberman.entities.PowerUps.Flames;
 import uet.oop.bomberman.entities.PowerUps.Speed;
-import uet.oop.bomberman.entities.Wall;
 import uet.oop.bomberman.entities.bomb.Bomb;
 import uet.oop.bomberman.entities.movable.Bomber;
 import uet.oop.bomberman.entities.movable.Movable;
@@ -38,14 +31,12 @@ public class BombermanGame extends Application {
     public static final int WIDTH = 31;
     public static final int HEIGHT = 13;
 
-    private int currentLevel = 1;
+    public static int currentLevel = 1;
     public static int numberOfBombs = 1;
     public static int bombRadius = 1;
 
-    public int cntBrick = 0;
-//    public long startTime = 18000;
-    public long startTime = 1000;
-    public long prevTime = 0;
+    public static int cntBrick = 0;
+
     public static GraphicsContext gc;
     private Canvas canvas;
 
@@ -53,7 +44,7 @@ public class BombermanGame extends Application {
     public static List<Entity> entities = new ArrayList<>();
     public static List<Entity> stillObjects = new ArrayList<>();
     public static List<Bomb> listBombs = new ArrayList<>();
-    public char[][] mapMatrix;
+    public static char[][] mapMatrix;
 
     public static Bomber bomberman;
 
@@ -66,8 +57,7 @@ public class BombermanGame extends Application {
     @Override
     public void start(Stage stage) {
         // Tao Canvas
-//        canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
-        canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT + 50);
+        canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
         gc = canvas.getGraphicsContext2D();
 
         // Tao root container
@@ -87,25 +77,14 @@ public class BombermanGame extends Application {
             public void handle(long l) {
                 render();
                 update();
-                prevTime += 1;
-                drawInfoBar(startTime - prevTime);
-//                drawInfoBar(System.currentTimeMillis());
-                if (bomberman.isGameOver()) {
-                    drawGameOver();
-                }
-
-                if (currentLevel == 0) {
-                    drawWinGame();
-                }
             }
         };
-
 
         timer.start();
         setKeyListener(scene);
         createMap();
-//        restart();
-//        myAudio.playSound("res/audio/background_music.wav", -1);
+
+
     }
 
     public void setKeyListener(Scene scene) {
@@ -139,18 +118,34 @@ public class BombermanGame extends Application {
                 case N:
                     // TODO: Test next level
                     System.out.println("Num of entities: " + entities.size());
-                    myAudio.playSound("res/audio/next_level.wav", 0);
                     nextMap();
                     break;
                 case M:
                     // TODO: Test destroy brick
-                    int cnt = 0;
-                    for (Entity entity : entities) {
-                        if (entity instanceof Bomber) {
-                            System.out.println("Num of bomber: " + (++cnt));
-                            System.out.println(entity.getX() + " : " + entity.getY());
-                            System.out.println(getPlayer().getX() + " : " + getPlayer().getY());
+
+                    for (Entity entity : stillObjects) {
+                        if (entity instanceof Brick) {
+                            ((Brick) entity).setDestroyed(true);
+                            System.out.println("Num of bricks: " + (--cntBrick));
                             break;
+                        }
+                    }
+                    break;
+                case L:
+                    // TODO: Test kill enemy
+
+                    for (Entity entity : entities) {
+                        if (entity instanceof Enemy) {
+                            ((Enemy) entity).kill();
+                            System.out.println(((Enemy) entity).isAlive());
+                            break;
+                        }
+                    }
+                    for (Entity entity : entities) {
+                        if (entity instanceof Enemy) {
+                            if (((Enemy) entity).isAlive()){
+                                System.out.println(((Enemy) entity).isAlive());
+                            }
                         }
                     }
                     break;
@@ -193,34 +188,19 @@ public class BombermanGame extends Application {
         });
     }
 
-    public void nextMap() {
+    public static void nextMap() {
         // TODO: Clear map
         entities.clear();
         stillObjects.clear();
         listBombs.clear();
-        _mobs.clear();
 
         // TODO: Create new map
         currentLevel++;
-        if (currentLevel > 5) {
-            currentLevel = 0;
-        }
         createMap();
-
-        //TODO: Reset item
-        resetItem();
     }
 
-    public void resetItem() {
-        numberOfBombs = 1;
-        bombRadius = 1;
-        bomberman.setSpeed(4);
-    }
-
-    public void createMap() {
-        if (currentLevel != 0) {
-            createMapFromFile("res/levels/Level" + currentLevel + ".txt");
-        }
+    public static void createMap() {
+        createMapFromFile("res/levels/Level" + currentLevel + ".txt");
 //        createMapFromFile("res/levels/test.txt");
 
         bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
@@ -248,19 +228,19 @@ public class BombermanGame extends Application {
                         object = new Balloon(i, j, Sprite.balloom_left1.getFxImage());
                         entities.add(object);
                         break;
-                    case '2':
+                    case '2' :
                         object = new Oneal(i, j, Sprite.oneal_left1.getFxImage());
                         entities.add(object);
                         break;
-                    case '3':
+                    case '3' :
                         object = new Doll(i, j, Sprite.doll_left1.getFxImage());
                         entities.add(object);
                         break;
-                    case '4':
+                    case '4' :
                         object = new Minvo(i, j, Sprite.minvo_left1.getFxImage());
                         entities.add(object);
                         break;
-                    case '5':
+                    case '5' :
                         object = new Kondoria(i, j, Sprite.kondoria_left1.getFxImage());
                         entities.add(object);
                         break;
@@ -269,22 +249,33 @@ public class BombermanGame extends Application {
                         stillObjects.add(object);
                         object = new Brick(i, j, Sprite.brick.getFxImage());
                         stillObjects.add(object);
+                        cntBrick++;
                         break;
                     case 'f':
                         object = new Flames(i, j, Sprite.powerup_flames.getFxImage());
                         stillObjects.add(object);
                         object = new Brick(i, j, Sprite.brick.getFxImage());
                         stillObjects.add(object);
+                        cntBrick++;
                         break;
                     case 's':
                         object = new Speed(i, j, Sprite.powerup_speed.getFxImage());
                         stillObjects.add(object);
                         object = new Brick(i, j, Sprite.brick.getFxImage());
                         stillObjects.add(object);
+                        cntBrick++;
+                        break;
+                    case 'x':
+                        object = new Portal(i, j, Sprite.portal.getFxImage());
+                        stillObjects.add(object);
+                        object = new Brick(i, j, Sprite.brick.getFxImage());
+                        stillObjects.add(object);
+                        cntBrick++;
                         break;
                 }
             }
         }
+        System.out.println("Số gạch trong map: " + cntBrick);
     }
 
     /**
@@ -292,7 +283,7 @@ public class BombermanGame extends Application {
      *
      * @param URL Đường dẫn để tạo map theo Level
      */
-    public void createMapFromFile(String URL) {
+    public static void createMapFromFile(String URL) {
         FileInputStream fis = null;
         BufferedReader reader = null;
 
@@ -374,10 +365,10 @@ public class BombermanGame extends Application {
         Iterator<Movable> itr = _mobs.iterator();
 
         Movable cur;
-        while (itr.hasNext()) {
+        while(itr.hasNext()) {
             cur = itr.next();
 
-            if (cur instanceof Bomber)
+            if(cur instanceof Bomber)
                 return (Bomber) cur;
         }
 
@@ -398,12 +389,11 @@ public class BombermanGame extends Application {
 
         for (int i = 0; i < _mobs.size(); i++) {
             Movable a = _mobs.get(i);
-            if (((Entity) a).isRemoved()) _mobs.remove(i);
+            if(((Entity)a).isRemoved()) _mobs.remove(i);
         }
     }
 
     public void render() {
-
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 //        entities.forEach(g -> g.render(gc));
 //        stillObjects.forEach(g -> g.render(gc));
@@ -419,61 +409,5 @@ public class BombermanGame extends Application {
         for (int i = 0; i < listBombs.size(); i++) {
             listBombs.get(i).render(gc);
         }
-    }
-
-    public void drawInfoBar(long time) {
-        if (time <= 0) {
-            bomberman.setGameOver(true);
-        }
-        gc.setFill(Color.BLACK);
-        gc.fillRect(0, Sprite.SCALED_SIZE * HEIGHT, Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT + 50);
-        gc.setTextAlign(TextAlignment.CENTER);
-        gc.setFill(Color.WHITE);
-        gc.setFont(Font.font("Arial", FontWeight.BOLD, 18));
-        gc.fillText(
-                "Time: " + (time / 100),
-                Math.round(canvas.getWidth() / 8),
-                Math.round(Sprite.SCALED_SIZE * HEIGHT + 27)
-        );
-        gc.fillText(
-                "Level: " + currentLevel,
-                Math.round(canvas.getWidth() / 2),
-                Math.round(Sprite.SCALED_SIZE * HEIGHT + 27)
-        );
-        gc.fillText(
-                "Lives: " + bomberman.getCntHearts(),
-                Math.round(canvas.getWidth() / 8 * 7),
-                Math.round(Sprite.SCALED_SIZE * HEIGHT + 27)
-        );
-    }
-
-    public void drawGameOver() {
-        configDraw();
-        gc.fillText(
-                "Game Over",
-                Math.round(canvas.getWidth() / 2),
-                Math.round(canvas.getHeight() / 2)
-        );
-    }
-
-    public void drawWinGame() {
-        configDraw();
-        gc.fillText(
-                "You Win!!!",
-                Math.round(canvas.getWidth() / 2),
-                Math.round(canvas.getHeight() / 2)
-        );
-
-//        timer.stop();
-    }
-
-    private void configDraw() {
-        gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        gc.setFill(Color.BLACK);
-        gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        gc.setFill(Color.WHITE);
-        gc.setTextAlign(TextAlignment.CENTER);
-        Font font = new Font("Arial", 48);
-        gc.setFont(font);
     }
 }
