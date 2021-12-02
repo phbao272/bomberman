@@ -18,7 +18,9 @@ public abstract class Enemy extends Movable {
     protected int speed;
     protected AI ai;
     protected boolean wallPass = false;
-    protected final int MAX_STEP = 90;
+    protected boolean bombPass = false;
+    protected boolean flamePass = false;
+    protected int MAX_STEP = 90;
     private final int allowDistance = 18;
 
     public Enemy(int xUnit, int yUnit, Image img) {
@@ -28,6 +30,10 @@ public abstract class Enemy extends Movable {
     public Enemy(int x, int y, Image dead, int speed) {
         super(x, y, dead);
         this.speed = speed;
+    }
+
+    public boolean isFlamePass() {
+        return flamePass;
     }
 
     @Override
@@ -60,7 +66,7 @@ public abstract class Enemy extends Movable {
                     }
 
                     for (Bomb bomb : BombermanGame.listBombs) {
-                        if (bomb.intersectDown(this)) {
+                        if (bomb.intersectDown(this) && !bombPass) {
                             direction = ai.calculateDirection();
                             return;
                         }
@@ -101,8 +107,7 @@ public abstract class Enemy extends Movable {
                     }
 
                     for (Bomb bomb : BombermanGame.listBombs) {
-                        if (bomb.intersectLeft(this)) {
-                            System.out.println("Het Max Step");
+                        if (bomb.intersectLeft(this) && !bombPass) {
                             direction = ai.calculateDirection();
                             return;
                         }
@@ -143,7 +148,7 @@ public abstract class Enemy extends Movable {
                     }
 
                     for (Bomb bomb : BombermanGame.listBombs) {
-                        if (bomb.intersectUp(this)) {
+                        if (bomb.intersectUp(this) && !bombPass) {
                             direction = ai.calculateDirection();
                             return;
                         }
@@ -184,7 +189,7 @@ public abstract class Enemy extends Movable {
                     }
 
                     for (Bomb bomb : BombermanGame.listBombs) {
-                        if (bomb.intersectRight(this)) {
+                        if (bomb.intersectRight(this) && !bombPass) {
                             direction = ai.calculateDirection();
                             return;
                         }

@@ -12,13 +12,10 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import uet.oop.bomberman.audio.Audio;
-import uet.oop.bomberman.entities.Brick;
-import uet.oop.bomberman.entities.Entity;
-import uet.oop.bomberman.entities.Grass;
+import uet.oop.bomberman.entities.*;
 import uet.oop.bomberman.entities.PowerUps.Bombs;
 import uet.oop.bomberman.entities.PowerUps.Flames;
 import uet.oop.bomberman.entities.PowerUps.Speed;
-import uet.oop.bomberman.entities.Wall;
 import uet.oop.bomberman.entities.bomb.Bomb;
 import uet.oop.bomberman.entities.movable.Bomber;
 import uet.oop.bomberman.entities.movable.Movable;
@@ -38,22 +35,23 @@ public class BombermanGame extends Application {
     public static final int WIDTH = 31;
     public static final int HEIGHT = 13;
 
-    private int currentLevel = 1;
+    public static int currentLevel = 1;
     public static int numberOfBombs = 1;
     public static int bombRadius = 1;
 
-    public int cntBrick = 0;
+    public static int cntBrick = 0;
 //    public long startTime = 18000;
     public long startTime = 1000;
     public long prevTime = 0;
     public static GraphicsContext gc;
     private Canvas canvas;
+    public static AnimationTimer timer;
 
     public static List<Movable> _mobs = new ArrayList<Movable>();
     public static List<Entity> entities = new ArrayList<>();
     public static List<Entity> stillObjects = new ArrayList<>();
     public static List<Bomb> listBombs = new ArrayList<>();
-    public char[][] mapMatrix;
+    public static char[][] mapMatrix;
 
     public static Bomber bomberman;
 
@@ -82,7 +80,7 @@ public class BombermanGame extends Application {
         stage.setTitle("Bomberman");
         stage.show();
 
-        AnimationTimer timer = new AnimationTimer() {
+        timer = new AnimationTimer() {
             @Override
             public void handle(long l) {
                 render();
@@ -144,12 +142,19 @@ public class BombermanGame extends Application {
                     break;
                 case M:
                     // TODO: Test destroy brick
-                    int cnt = 0;
+                    for (Entity entity : stillObjects) {
+                        if (entity instanceof Brick) {
+                            ((Brick) entity).setDestroyed(true);
+                            break;
+                        }
+                    }
+                    break;
+                case L:
+                    // TODO: Test kill enemy
                     for (Entity entity : entities) {
-                        if (entity instanceof Bomber) {
-                            System.out.println("Num of bomber: " + (++cnt));
-                            System.out.println(entity.getX() + " : " + entity.getY());
-                            System.out.println(getPlayer().getX() + " : " + getPlayer().getY());
+                        if (entity instanceof Enemy) {
+                            ((Enemy) entity).kill();
+                            System.out.println(((Enemy) entity).isAlive());
                             break;
                         }
                     }
@@ -193,12 +198,16 @@ public class BombermanGame extends Application {
         });
     }
 
-    public void nextMap() {
-        // TODO: Clear map
+    public static void clearMap() {
         entities.clear();
         stillObjects.clear();
         listBombs.clear();
         _mobs.clear();
+    }
+
+    public static void nextMap() {
+        // TODO: Clear map
+        clearMap();
 
         // TODO: Create new map
         currentLevel++;
@@ -208,16 +217,18 @@ public class BombermanGame extends Application {
         createMap();
 
         //TODO: Reset item
-        resetItem();
+        resetGame();
     }
 
-    public void resetItem() {
+    public static void resetGame() {
         numberOfBombs = 1;
         bombRadius = 1;
         bomberman.setSpeed(4);
+//        startTime = 10;
+//        prevTime = 0;
     }
 
-    public void createMap() {
+    public static void createMap() {
         if (currentLevel != 0) {
             createMapFromFile("res/levels/Level" + currentLevel + ".txt");
         }
@@ -282,6 +293,12 @@ public class BombermanGame extends Application {
                         object = new Brick(i, j, Sprite.brick.getFxImage());
                         stillObjects.add(object);
                         break;
+                    case 'x':
+                        object = new Portal(i, j, Sprite.portal.getFxImage());
+                        stillObjects.add(object);
+                        object = new Brick(i, j, Sprite.brick.getFxImage());
+                        stillObjects.add(object);
+                        break;
                 }
             }
         }
@@ -292,7 +309,7 @@ public class BombermanGame extends Application {
      *
      * @param URL Đường dẫn để tạo map theo Level
      */
-    public void createMapFromFile(String URL) {
+    public static void createMapFromFile(String URL) {
         FileInputStream fis = null;
         BufferedReader reader = null;
 
@@ -448,15 +465,19 @@ public class BombermanGame extends Application {
     }
 
     public void drawGameOver() {
+        clearMap();
         configDraw();
         gc.fillText(
                 "Game Over",
                 Math.round(canvas.getWidth() / 2),
                 Math.round(canvas.getHeight() / 2)
         );
+
+        timer.stop();
     }
 
     public void drawWinGame() {
+        clearMap();
         configDraw();
         gc.fillText(
                 "You Win!!!",
@@ -464,7 +485,7 @@ public class BombermanGame extends Application {
                 Math.round(canvas.getHeight() / 2)
         );
 
-//        timer.stop();
+        timer.stop();
     }
 
     private void configDraw() {

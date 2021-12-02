@@ -4,13 +4,18 @@ import javafx.scene.image.Image;
 import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.movable.enemy.ai.AILow;
+import uet.oop.bomberman.entities.movable.enemy.ai.AIMedium;
 import uet.oop.bomberman.graphics.Sprite;
 
 public class Minvo extends Enemy {
     public Minvo(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img, 1);
-        ai = new AILow();
+        ai = new AIMedium(BombermanGame.getPlayer(), this);
         direction = ai.calculateDirection();
+        wallPass = true;
+        bombPass = true;
+        flamePass = true;
+        MAX_STEP = 90;
     }
 
     @Override

@@ -6,6 +6,7 @@ import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.audio.Audio;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.movable.Movable;
+import uet.oop.bomberman.entities.movable.enemy.Enemy;
 import uet.oop.bomberman.graphics.Sprite;
 
 public class Bomb extends Entity {
@@ -56,7 +57,12 @@ public class Bomb extends Entity {
                                 && (entity.getX() >= expEnd.getX() && entity.getX() < expEnd.getMaxX()
                                 || entity.getMaxX() - 18 > expEnd.getX() && entity.getMaxX() - 18 < expEnd.getMaxX())) {
                             if (movable.isAlive()) {
-                                movable.kill();
+                                if (movable instanceof Enemy) {
+                                    if (!((Enemy) movable).isFlamePass())
+                                    movable.kill();
+                                } else {
+                                    movable.kill();
+                                }
                             }
                         }
                     }
@@ -68,7 +74,12 @@ public class Bomb extends Entity {
                                 && (entity.getY() >= expEnd.getY() && entity.getY() < expEnd.getMaxY()
                                 || entity.getMaxY() > expEnd.getY() && entity.getMaxY() < expEnd.getMaxY())) {
                             if (movable.isAlive()) {
-                                movable.kill();
+                                if (movable instanceof Enemy) {
+                                    if (!((Enemy) movable).isFlamePass())
+                                        movable.kill();
+                                } else {
+                                    movable.kill();
+                                }
                             }
                         }
                     }
@@ -80,7 +91,12 @@ public class Bomb extends Entity {
                                 && (entity.getX() >= expEnd.getX() && entity.getX() < expEnd.getMaxX()
                                 || entity.getMaxX() > expEnd.getX() && entity.getMaxX() < expEnd.getMaxX())) {
                             if (movable.isAlive()) {
-                                movable.kill();
+                                if (movable instanceof Enemy) {
+                                    if (!((Enemy) movable).isFlamePass())
+                                        movable.kill();
+                                } else {
+                                    movable.kill();
+                                }
                             }
                         }
                     }
@@ -92,7 +108,12 @@ public class Bomb extends Entity {
                                 && (entity.getY() >= expEnd.getY() && entity.getY() < expEnd.getMaxY()
                                 || entity.getMaxY() > expEnd.getY() && entity.getMaxY() < expEnd.getMaxY())) {
                             if (movable.isAlive()) {
-                                movable.kill();
+                                if (movable instanceof Enemy) {
+                                    if (!((Enemy) movable).isFlamePass())
+                                        movable.kill();
+                                } else {
+                                    movable.kill();
+                                }
                             }
                         }
                     }

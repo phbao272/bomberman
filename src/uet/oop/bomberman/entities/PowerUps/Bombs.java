@@ -10,9 +10,6 @@ import uet.oop.bomberman.entities.movable.Bomber;
 import static uet.oop.bomberman.BombermanGame.numberOfBombs;
 
 public class Bombs extends PowerUp{
-
-
-
     public Bombs(int x, int y, Image img) {
         super(x, y, img);
     }
@@ -27,7 +24,7 @@ public class Bombs extends PowerUp{
         }
         for (Entity entity : BombermanGame.entities) {
             if (entity instanceof Bomber) {
-                if (entity.intersect(this) && this.isActive()) {
+                if (entity.isCollided(this) && this.isActive()) {
                     numberOfBombs++;
                     myAudio.playSound("res/audio/power_up.wav", 0);
                     System.out.println("Bomb + 1");

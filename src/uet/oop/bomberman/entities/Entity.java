@@ -95,12 +95,12 @@ public abstract class Entity {
         return impactY && intersectX;
     }
 
-    public boolean intersect(Entity other){
-        if (intersectUp(other) || intersectDown(other)
-                || intersectLeft(other) || intersectRight(other)) {
-            return true;
+    public boolean isCollided(Entity e) {
+        if ((e.getMaxX() - 8 <= this.getX()) || (e.getMaxY() - 8 <= this.getY())
+                || (this.getMaxX() <= e.getX() + 8) || (this.getMaxY() - 8 <= e.getY())) {
+            return false;
         }
-        return false;
+        return true;
     }
 
     public void setImg(Image img) {
@@ -116,6 +116,5 @@ public abstract class Entity {
     }
 
     public abstract void update();
-
 
 }

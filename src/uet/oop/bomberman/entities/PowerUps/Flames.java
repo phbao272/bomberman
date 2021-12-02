@@ -25,7 +25,7 @@ public class Flames extends PowerUp{
         }
         for (Entity entity : BombermanGame.entities) {
             if (entity instanceof Bomber) {
-                if (entity.intersect(this) && this.isActive()) {
+                if (entity.isCollided(this) && this.isActive()) {
                     bombRadius++;
                     myAudio.playSound("res/audio/power_up.wav", 0);
                     System.out.println("Flame + 1");
