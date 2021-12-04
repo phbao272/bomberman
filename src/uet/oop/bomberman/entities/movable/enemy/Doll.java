@@ -10,6 +10,7 @@ public class Doll extends Enemy {
         super(xUnit, yUnit, img, 1);
         ai = new AILow();
         direction = ai.calculateDirection();
+
     }
 
     @Override

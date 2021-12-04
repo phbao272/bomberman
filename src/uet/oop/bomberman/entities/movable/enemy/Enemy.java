@@ -5,6 +5,7 @@ import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.entities.Brick;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.Grass;
+import uet.oop.bomberman.entities.Portal;
 import uet.oop.bomberman.entities.PowerUps.PowerUp;
 import uet.oop.bomberman.entities.bomb.Bomb;
 import uet.oop.bomberman.entities.movable.Bomber;
@@ -60,7 +61,7 @@ public abstract class Enemy extends Movable {
                             if (EnemyUp(entity)) return;
                         } else if (entity instanceof Bomber) {
                             if (entity.intersectDown(this)) {
-//                                ((Bomber) entity).kill();
+                                ((Bomber) entity).kill();
                             }
                         }
                     }
@@ -73,7 +74,7 @@ public abstract class Enemy extends Movable {
                     }
 
                     for (Entity entity : BombermanGame.stillObjects) {
-                        if (entity instanceof Brick || entity instanceof PowerUp) {
+                        if (entity instanceof Brick || entity instanceof PowerUp || entity instanceof Portal) {
                             if (!wallPass) {
                                 if (EnemyUp(entity)) return;
                             }
@@ -101,7 +102,7 @@ public abstract class Enemy extends Movable {
                             if (EnemyRight(entity)) return;
                         } else if (entity instanceof Bomber) {
                             if (entity.intersectLeft(this)) {
-//                                ((Bomber) entity).kill();
+                                ((Bomber) entity).kill();
                             }
                         }
                     }
@@ -114,7 +115,7 @@ public abstract class Enemy extends Movable {
                     }
 
                     for (Entity entity : BombermanGame.stillObjects) {
-                        if (entity instanceof Brick || entity instanceof PowerUp) {
+                        if (entity instanceof Brick || entity instanceof PowerUp || entity instanceof Portal) {
                             if (!wallPass) {
                                 if (EnemyRight(entity)) return;
                             }
@@ -142,7 +143,7 @@ public abstract class Enemy extends Movable {
                             if (EnemyDown(entity)) return;
                         } else if (entity instanceof Bomber) {
                             if (entity.intersectUp(this)) {
-//                                ((Bomber) entity).kill();
+                                ((Bomber) entity).kill();
                             }
                         }
                     }
@@ -155,7 +156,7 @@ public abstract class Enemy extends Movable {
                     }
 
                     for (Entity entity : BombermanGame.stillObjects) {
-                        if (entity instanceof Brick || entity instanceof PowerUp) {
+                        if (entity instanceof Brick || entity instanceof PowerUp || entity instanceof Portal) {
                             if (!wallPass) {
                                 if (EnemyDown(entity)) return;
                             }
@@ -183,7 +184,7 @@ public abstract class Enemy extends Movable {
                             if (EnemyLeft(entity)) return;
                         } else if (entity instanceof Bomber) {
                             if (entity.intersectRight(this)) {
-//                                ((Bomber) entity).kill();
+                                ((Bomber) entity).kill();
                             }
                         }
                     }
@@ -196,7 +197,7 @@ public abstract class Enemy extends Movable {
                     }
 
                     for (Entity entity : BombermanGame.stillObjects) {
-                        if (entity instanceof Brick || entity instanceof PowerUp) {
+                        if (entity instanceof Brick || entity instanceof PowerUp || entity instanceof Portal) {
                             if (!wallPass) {
                                 if (EnemyLeft(entity)) return;
                             }

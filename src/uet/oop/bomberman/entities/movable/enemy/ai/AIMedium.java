@@ -52,6 +52,7 @@ public class AIMedium extends AI{
             return 0;
         else if(player.getTileY() > enemy.getTileY())
             return 2;
+
         return -1;
     }
 }

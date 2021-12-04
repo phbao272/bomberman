@@ -27,7 +27,7 @@ public class Bombs extends PowerUp{
                 if (entity.isCollided(this) && this.isActive()) {
                     numberOfBombs++;
                     myAudio.playSound("res/audio/power_up.wav", 0);
-                    System.out.println("Bomb + 1");
+                    System.out.println("Bomb: " + numberOfBombs);
                     BombermanGame.stillObjects.remove(this);
                 }
             }

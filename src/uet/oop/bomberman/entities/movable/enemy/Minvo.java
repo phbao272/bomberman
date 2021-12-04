@@ -15,7 +15,7 @@ public class Minvo extends Enemy {
         wallPass = true;
         bombPass = true;
         flamePass = true;
-        MAX_STEP = 90;
+        MAX_STEP = 30;
     }
 
     @Override

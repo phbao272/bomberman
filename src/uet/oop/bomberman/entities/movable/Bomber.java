@@ -3,10 +3,14 @@ package uet.oop.bomberman.entities.movable;
 import javafx.scene.image.Image;
 import uet.oop.bomberman.BombermanGame;
 import uet.oop.bomberman.audio.Audio;
+import uet.oop.bomberman.entities.Brick;
+import uet.oop.bomberman.entities.Entity;
+import uet.oop.bomberman.entities.Wall;
+import uet.oop.bomberman.entities.bomb.Bomb;
+import uet.oop.bomberman.entities.movable.enemy.Enemy;
 import uet.oop.bomberman.graphics.Sprite;
 
 public class Bomber extends Movable {
-    private int cntHearts = 3;
     private boolean gameOver = false;
 
     public Bomber(int xUnit, int yUnit, Image img) {
@@ -17,23 +21,21 @@ public class Bomber extends Movable {
     public void kill() {
         setAlive(false);
         Audio.playSound("res/audio/dead.wav", 0);
-        if (cntHearts > 0) {
-            cntHearts--;
+        if (BombermanGame.lives > 0) {
+            BombermanGame.lives -= 1;
+
         }
     }
 
     @Override
     public void afterKill() {
-        if (cntHearts > 0) {
+        if (BombermanGame.lives > 0) {
+            BombermanGame.restartMap();
             setAlive(true);
         } else {
             setGameOver(true);
             BombermanGame.entities.remove(this);
         }
-    }
-
-    public int getCntHearts() {
-        return cntHearts;
     }
 
     public boolean isGameOver() {
@@ -64,11 +66,6 @@ public class Bomber extends Movable {
                 Audio.playSound("res/audio/walk.wav", 0);
                 break;
         }
-
-//        System.out.println("Tọa độ người chơi: X: " + x
-//                + " Y: " + y);
-//        System.out.println("Tọa độ người chơi max: X: " + getMaxX()
-//                + " Y: " + getMaxY());
     }
 
     public void moveLeft() {
@@ -86,11 +83,6 @@ public class Bomber extends Movable {
                 Audio.playSound("res/audio/walk.wav", 0);
                 break;
         }
-
-//        System.out.println("Tọa độ người chơi: X: " + x
-//                + " Y: " + y);
-//        System.out.println("Tọa độ người chơi max: X: " + getMaxX()
-//                + " Y: " + getMaxY());
     }
 
     public void moveUp() {
@@ -109,11 +101,6 @@ public class Bomber extends Movable {
                 Audio.playSound("res/audio/walk.wav", 0);
                 break;
         }
-
-//        System.out.println("Tọa độ người chơi: X: " + x
-//                + " Y: " + y);
-//        System.out.println("Tọa độ người chơi max: X: " + getMaxX()
-//                + " Y: " + getMaxY());
     }
 
     public void moveDown() {
@@ -132,11 +119,138 @@ public class Bomber extends Movable {
                 Audio.playSound("res/audio/walk.wav", 0);
                 break;
         }
+    }
 
-//        System.out.println("Tọa độ người chơi: X: " + x
-//                + " Y: " + y);
-//        System.out.println("Tọa độ người chơi max: X: " + getMaxX()
-//                + " Y: " + getMaxY());
+    public boolean canMoveRight() {
+        for (Entity entity : BombermanGame.stillObjects) {
+            if (entity instanceof Wall || (entity instanceof Brick && !wallPass)) {
+                if (entity.intersectLeft(this)) {
+                    if (getMaxY() - entity.getY() <= allowDistance) {
+                        y -= getMaxY() - entity.getY();
+                    }
+                    if (entity.getMaxY() - getY() <= allowDistance) {
+                        y += entity.getMaxY() - getY();
+                    }
+                    return false;
+                }
+            }
+        }
+
+        for (Entity entity : BombermanGame.entities) {
+            if (entity instanceof Enemy) {
+                if (entity.intersectLeft(this)) {
+                    BombermanGame.bomberman.kill();
+                    System.out.println(1);
+                }
+            }
+        }
+
+        for (Bomb bomb : BombermanGame.listBombs) {
+            if (bomb.intersectLeft(this)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public boolean canMoveLeft() {
+        for (Entity entity : BombermanGame.stillObjects) {
+            if (entity instanceof Wall || (entity instanceof Brick && !wallPass)) {
+                if (entity.intersectRight(this)) {
+                    if (getMaxY() - entity.getY() <= allowDistance) {
+                        y -= getMaxY() - entity.getY();
+                    }
+                    if (entity.getMaxY() - getY() <= allowDistance) {
+                        y += entity.getMaxY() - getY();
+                    }
+                    return false;
+                }
+            }
+        }
+
+        for (Entity entity : BombermanGame.entities) {
+            if (entity instanceof Enemy) {
+                if (entity.intersectRight(this)) {
+                    BombermanGame.bomberman.kill();
+                    System.out.println(3);
+                }
+            }
+        }
+
+        for (Bomb bomb : BombermanGame.listBombs) {
+            if (bomb.intersectRight(this)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public boolean canMoveUp() {
+        for (Entity entity : BombermanGame.stillObjects) {
+            if (entity instanceof Wall || (entity instanceof Brick)) {
+                if (entity.intersectDown(this)) {
+                    if (getMaxX() - entity.getX() <= allowDistance) {
+                        x -= getMaxX() - entity.getX();
+                    }
+                    if (entity.getMaxX() - getX() <= allowDistance) {
+                        x += entity.getMaxX() - getX();
+                    }
+                    return false;
+                }
+            }
+        }
+
+        for (Entity entity : BombermanGame.entities) {
+            if (entity instanceof Enemy) {
+                if (entity.intersectDown(this)) {
+                    BombermanGame.bomberman.kill();
+                    System.out.println(0);
+                }
+            }
+        }
+
+        for (Bomb bomb : BombermanGame.listBombs) {
+            if (bomb.intersectDown(this)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public boolean canMoveDown() {
+        for (Entity entity : BombermanGame.stillObjects) {
+            if (entity instanceof Wall || (entity instanceof Brick && !wallPass)) {
+                if (entity.intersectUp(this)) {
+                    if (getMaxX() - entity.getX() <= allowDistance) {
+                        x -= getMaxX() - entity.getX();
+                    }
+                    if (entity.getMaxX() - getX() <= allowDistance) {
+                        x += entity.getMaxX() - getX();
+                    }
+                    return false;
+                }
+            }
+        }
+
+        for (Entity entity : BombermanGame.entities) {
+            if (entity instanceof Enemy) {
+                if (entity.intersectUp(this)) {
+                    BombermanGame.bomberman.kill();
+                    System.out.println(2);
+                }
+            }
+        }
+
+        for (Bomb bomb : BombermanGame.listBombs) {
+            if (bomb.intersectUp(this)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     @Override
@@ -162,7 +276,6 @@ public class Bomber extends Movable {
             } else {
                 afterKill();
                 frameToDisappear = 48;
-//                BombermanGame.entities.remove(this);
             }
         }
 

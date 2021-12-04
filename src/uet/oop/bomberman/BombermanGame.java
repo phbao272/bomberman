@@ -14,6 +14,7 @@ import javafx.stage.Stage;
 import uet.oop.bomberman.audio.Audio;
 import uet.oop.bomberman.entities.*;
 import uet.oop.bomberman.entities.PowerUps.Bombs;
+import uet.oop.bomberman.entities.PowerUps.Detonator;
 import uet.oop.bomberman.entities.PowerUps.Flames;
 import uet.oop.bomberman.entities.PowerUps.Speed;
 import uet.oop.bomberman.entities.bomb.Bomb;
@@ -38,16 +39,20 @@ public class BombermanGame extends Application {
     public static int currentLevel = 1;
     public static int numberOfBombs = 1;
     public static int bombRadius = 1;
+    public static int lives = 3;
 
     public static int cntBrick = 0;
-//    public long startTime = 18000;
-    public long startTime = 1000;
-    public long prevTime = 0;
+    public static long startTime = 181;
+    public static long prevTime = 0;
+
     public static GraphicsContext gc;
+    public static GraphicsContext gc1;
     private Canvas canvas;
+    private Canvas canvas1;
+
     public static AnimationTimer timer;
 
-    public static List<Movable> _mobs = new ArrayList<Movable>();
+    public static List<Movable> mobs = new ArrayList<Movable>();
     public static List<Entity> entities = new ArrayList<>();
     public static List<Entity> stillObjects = new ArrayList<>();
     public static List<Bomb> listBombs = new ArrayList<>();
@@ -64,12 +69,17 @@ public class BombermanGame extends Application {
     @Override
     public void start(Stage stage) {
         // Tao Canvas
-//        canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
-        canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT + 50);
+        canvas = new Canvas(Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT);
+        canvas1 = new Canvas(Sprite.SCALED_SIZE * WIDTH, 50);
+
         gc = canvas.getGraphicsContext2D();
+        gc1 = canvas1.getGraphicsContext2D();
+
+        canvas.setTranslateY(50);
 
         // Tao root container
         Group root = new Group();
+        root.getChildren().add(canvas1);
         root.getChildren().add(canvas);
 
         // Tao scene
@@ -85,9 +95,9 @@ public class BombermanGame extends Application {
             public void handle(long l) {
                 render();
                 update();
-                prevTime += 1;
-                drawInfoBar(startTime - prevTime);
-//                drawInfoBar(System.currentTimeMillis());
+
+                drawInfoBar();
+
                 if (bomberman.isGameOver()) {
                     drawGameOver();
                 }
@@ -98,12 +108,11 @@ public class BombermanGame extends Application {
             }
         };
 
-
         timer.start();
         setKeyListener(scene);
         createMap();
-//        restart();
-//        myAudio.playSound("res/audio/background_music.wav", -1);
+
+        myAudio.playSound("res/audio/background_music.wav", -1);
     }
 
     public void setKeyListener(Scene scene) {
@@ -131,12 +140,11 @@ public class BombermanGame extends Application {
                     break;
                 case K:
                     // TODO: Test player die
-                    bomberman.setAlive(false);
+                    bomberman.kill();
                     myAudio.playSound("res/audio/dead.wav", 0);
                     break;
                 case N:
                     // TODO: Test next level
-                    System.out.println("Num of entities: " + entities.size());
                     myAudio.playSound("res/audio/next_level.wav", 0);
                     nextMap();
                     break;
@@ -154,7 +162,6 @@ public class BombermanGame extends Application {
                     for (Entity entity : entities) {
                         if (entity instanceof Enemy) {
                             ((Enemy) entity).kill();
-                            System.out.println(((Enemy) entity).isAlive());
                             break;
                         }
                     }
@@ -202,7 +209,15 @@ public class BombermanGame extends Application {
         entities.clear();
         stillObjects.clear();
         listBombs.clear();
-        _mobs.clear();
+        mobs.clear();
+    }
+
+    public static void resetGame() {
+        numberOfBombs = 1;
+        bombRadius = 1;
+        bomberman.setSpeed(4);
+        startTime = 181;
+        prevTime = 0;
     }
 
     public static void nextMap() {
@@ -216,16 +231,19 @@ public class BombermanGame extends Application {
         }
         createMap();
 
-        //TODO: Reset item
+        //TODO: Reset Game
         resetGame();
     }
 
-    public static void resetGame() {
-        numberOfBombs = 1;
-        bombRadius = 1;
-        bomberman.setSpeed(4);
-//        startTime = 10;
-//        prevTime = 0;
+    public static void restartMap() {
+        // TODO: Clear map
+        clearMap();
+
+        // TODO: Create map
+        createMap();
+
+        //TODO: Reset Game
+        resetGame();
     }
 
     public static void createMap() {
@@ -236,7 +254,7 @@ public class BombermanGame extends Application {
 
         bomberman = new Bomber(1, 1, Sprite.player_right.getFxImage());
         entities.add(bomberman);
-        _mobs.add(bomberman);
+        mobs.add(bomberman);
 
 
         for (int i = 0; i < WIDTH; i++) {
@@ -289,6 +307,12 @@ public class BombermanGame extends Application {
                         break;
                     case 's':
                         object = new Speed(i, j, Sprite.powerup_speed.getFxImage());
+                        stillObjects.add(object);
+                        object = new Brick(i, j, Sprite.brick.getFxImage());
+                        stillObjects.add(object);
+                        break;
+                    case 'd':
+                        object = new Detonator(i, j, Sprite.powerup_detonator.getFxImage());
                         stillObjects.add(object);
                         object = new Brick(i, j, Sprite.brick.getFxImage());
                         stillObjects.add(object);
@@ -388,7 +412,7 @@ public class BombermanGame extends Application {
     }
 
     public static Bomber getPlayer() {
-        Iterator<Movable> itr = _mobs.iterator();
+        Iterator<Movable> itr = mobs.iterator();
 
         Movable cur;
         while (itr.hasNext()) {
@@ -413,14 +437,13 @@ public class BombermanGame extends Application {
             listBombs.get(i).update();
         }
 
-        for (int i = 0; i < _mobs.size(); i++) {
-            Movable a = _mobs.get(i);
-            if (((Entity) a).isRemoved()) _mobs.remove(i);
+        for (int i = 0; i < mobs.size(); i++) {
+            Movable a = mobs.get(i);
+            if (((Entity) a).isRemoved()) mobs.remove(i);
         }
     }
 
     public void render() {
-
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
 //        entities.forEach(g -> g.render(gc));
 //        stillObjects.forEach(g -> g.render(gc));
@@ -438,59 +461,65 @@ public class BombermanGame extends Application {
         }
     }
 
-    public void drawInfoBar(long time) {
-        if (time <= 0) {
-            bomberman.setGameOver(true);
+    public void drawInfoBar() {
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - prevTime >= 1000) {
+            prevTime = currentTime;
+            startTime -= 1;
+            if (startTime <= 0) {
+                bomberman.setGameOver(true);
+            }
         }
-        gc.setFill(Color.BLACK);
-        gc.fillRect(0, Sprite.SCALED_SIZE * HEIGHT, Sprite.SCALED_SIZE * WIDTH, Sprite.SCALED_SIZE * HEIGHT + 50);
-        gc.setTextAlign(TextAlignment.CENTER);
-        gc.setFill(Color.WHITE);
-        gc.setFont(Font.font("Arial", FontWeight.BOLD, 18));
-        gc.fillText(
-                "Time: " + (time / 100),
+        gc1.setFill(Color.BLACK);
+        gc1.fillRect(0, 0, Sprite.SCALED_SIZE * WIDTH, 50);
+        gc1.setTextAlign(TextAlignment.CENTER);
+        gc1.setFill(Color.WHITE);
+        gc1.setFont(Font.font("Arial", FontWeight.BOLD, 18));
+        gc1.fillText(
+                "Time: " + (startTime),
                 Math.round(canvas.getWidth() / 8),
-                Math.round(Sprite.SCALED_SIZE * HEIGHT + 27)
+                Math.round(27)
         );
-        gc.fillText(
+        gc1.fillText(
                 "Level: " + currentLevel,
                 Math.round(canvas.getWidth() / 2),
-                Math.round(Sprite.SCALED_SIZE * HEIGHT + 27)
+                Math.round(27)
         );
-        gc.fillText(
-                "Lives: " + bomberman.getCntHearts(),
+        gc1.fillText(
+                "Lives: " + lives,
                 Math.round(canvas.getWidth() / 8 * 7),
-                Math.round(Sprite.SCALED_SIZE * HEIGHT + 27)
+                Math.round(27)
         );
     }
 
     public void drawGameOver() {
-        clearMap();
         configDraw();
         gc.fillText(
                 "Game Over",
                 Math.round(canvas.getWidth() / 2),
-                Math.round(canvas.getHeight() / 2)
+                Math.round((canvas.getHeight() - 50) / 2)
         );
 
         timer.stop();
     }
 
     public void drawWinGame() {
-        clearMap();
         configDraw();
         gc.fillText(
                 "You Win!!!",
                 Math.round(canvas.getWidth() / 2),
-                Math.round(canvas.getHeight() / 2)
+                Math.round((canvas.getHeight() - 50) / 2)
         );
 
         timer.stop();
     }
 
     private void configDraw() {
+        gc1.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        gc1.setFill(Color.BLACK);
+        gc1.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+
         gc.clearRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
         gc.setFill(Color.WHITE);
         gc.setTextAlign(TextAlignment.CENTER);

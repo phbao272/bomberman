@@ -7,11 +7,10 @@ import uet.oop.bomberman.entities.Brick;
 import uet.oop.bomberman.entities.Entity;
 import uet.oop.bomberman.entities.movable.Bomber;
 
-import static uet.oop.bomberman.BombermanGame.bombRadius;
+import static uet.oop.bomberman.BombermanGame.lives;
 
-public class Flames extends PowerUp{
-
-    public Flames(int x, int y, Image img) {
+public class Detonator extends PowerUp {
+    public Detonator(int x, int y, Image img) {
         super(x, y, img);
     }
 
@@ -26,9 +25,9 @@ public class Flames extends PowerUp{
         for (Entity entity : BombermanGame.entities) {
             if (entity instanceof Bomber) {
                 if (entity.isCollided(this) && this.isActive()) {
-                    bombRadius++;
+                    lives++;
                     myAudio.playSound("res/audio/power_up.wav", 0);
-                    System.out.println("Flame: " + bombRadius);
+                    System.out.println("lives: " + lives);
                     BombermanGame.stillObjects.remove(this);
                 }
             }
@@ -40,5 +39,4 @@ public class Flames extends PowerUp{
     public void update() {
 
     }
-
 }
