@@ -30,8 +30,8 @@ public class Bomber extends Movable {
     @Override
     public void afterKill() {
         if (BombermanGame.lives > 0) {
-            BombermanGame.restartMap();
-            setAlive(true);
+                BombermanGame.restartMap();
+//            setAlive(true);
         } else {
             setGameOver(true);
             BombermanGame.entities.remove(this);
