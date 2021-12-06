@@ -14,14 +14,13 @@ import uet.oop.bomberman.entities.movable.enemy.ai.AI;
 import uet.oop.bomberman.entities.movable.enemy.ai.AIMedium;
 
 public abstract class Enemy extends Movable {
-    public int direction = -1;  //0 : up, 1 : right, 2 : down, 3 : left
-
+    protected int direction = -1;  //0 : up, 1 : right, 2 : down, 3 : left
     protected int speed;
     protected AI ai;
     protected boolean wallPass = false;
     protected boolean bombPass = false;
     protected boolean flamePass = false;
-    protected int MAX_STEP = 90;
+    protected int maxStep = 90;
     private final int allowDistance = 18;
 
     public Enemy(int xUnit, int yUnit, Image img) {
@@ -74,18 +73,20 @@ public abstract class Enemy extends Movable {
                     }
 
                     for (Entity entity : BombermanGame.stillObjects) {
-                        if (entity instanceof Brick || entity instanceof PowerUp || entity instanceof Portal) {
+                        if (entity instanceof Brick) {
                             if (!wallPass) {
                                 if (EnemyUp(entity)) return;
+                            } else if (entity instanceof PowerUp || entity instanceof Portal) {
+                                return;
                             }
                         }
-                        else if (!(entity instanceof Grass)) {
+                        else if (!(entity instanceof Grass || entity instanceof PowerUp || entity instanceof Portal)) {
                             if (EnemyUp(entity)) return;
                         }
                     }
 
                     if (ai instanceof AIMedium) {
-                        if (step > MAX_STEP) {
+                        if (step > maxStep) {
                             step = 0;
                             direction = ai.calculateDirection();
                             return;
@@ -115,18 +116,20 @@ public abstract class Enemy extends Movable {
                     }
 
                     for (Entity entity : BombermanGame.stillObjects) {
-                        if (entity instanceof Brick || entity instanceof PowerUp || entity instanceof Portal) {
+                        if (entity instanceof Brick) {
                             if (!wallPass) {
                                 if (EnemyRight(entity)) return;
+                            } else if (entity instanceof PowerUp || entity instanceof Portal) {
+                                return;
                             }
                         }
-                        else if (!(entity instanceof Grass)) {
+                        else if (!(entity instanceof Grass || entity instanceof PowerUp || entity instanceof Portal)) {
                             if (EnemyRight(entity)) return;
                         }
                     }
 
                     if (ai instanceof AIMedium) {
-                        if (step > MAX_STEP) {
+                        if (step > maxStep) {
                             step = 0;
                             direction = ai.calculateDirection();
                             return;
@@ -156,18 +159,20 @@ public abstract class Enemy extends Movable {
                     }
 
                     for (Entity entity : BombermanGame.stillObjects) {
-                        if (entity instanceof Brick || entity instanceof PowerUp || entity instanceof Portal) {
+                        if (entity instanceof Brick) {
                             if (!wallPass) {
                                 if (EnemyDown(entity)) return;
+                            } else if (entity instanceof PowerUp || entity instanceof Portal) {
+                                return;
                             }
                         }
-                        else if (!(entity instanceof Grass)) {
+                        else if (!(entity instanceof Grass || entity instanceof PowerUp || entity instanceof Portal)) {
                             if (EnemyDown(entity)) return;
                         }
                     }
 
                     if (ai instanceof AIMedium) {
-                        if (step > MAX_STEP) {
+                        if (step > maxStep) {
                             step = 0;
                             direction = ai.calculateDirection();
                             return;
@@ -197,18 +202,20 @@ public abstract class Enemy extends Movable {
                     }
 
                     for (Entity entity : BombermanGame.stillObjects) {
-                        if (entity instanceof Brick || entity instanceof PowerUp || entity instanceof Portal) {
+                        if (entity instanceof Brick) {
                             if (!wallPass) {
                                 if (EnemyLeft(entity)) return;
+                            } else if (entity instanceof PowerUp || entity instanceof Portal) {
+                                return;
                             }
                         }
-                        else if (!(entity instanceof Grass)) {
+                        else if (!(entity instanceof Grass || entity instanceof PowerUp || entity instanceof Portal)) {
                             if (EnemyLeft(entity)) return;
                         }
                     }
 
                     if (ai instanceof AIMedium) {
-                        if (step > MAX_STEP) {
+                        if (step > maxStep) {
                             step = 0;
                             direction = ai.calculateDirection();
                             return;

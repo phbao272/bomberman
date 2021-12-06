@@ -11,7 +11,7 @@ public class Kondoria extends Enemy {
         ai = new AIMedium(BombermanGame.getPlayer(), this);
         direction = ai.calculateDirection();
         wallPass = true;
-        MAX_STEP = 30;
+        maxStep = 30;
     }
 
     @Override

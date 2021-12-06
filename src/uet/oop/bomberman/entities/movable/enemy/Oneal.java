@@ -10,6 +10,7 @@ public class Oneal extends Enemy {
         super(xUnit, yUnit, img, 2);
         ai = new AIMedium(BombermanGame.getPlayer(), this);
         direction = ai.calculateDirection();
+        maxStep = 30;
     }
 
     @Override

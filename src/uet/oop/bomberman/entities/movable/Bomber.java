@@ -12,7 +12,7 @@ import uet.oop.bomberman.graphics.Sprite;
 
 public class Bomber extends Movable {
     private boolean gameOver = false;
-
+    private boolean checkAlive = true;
     public Bomber(int xUnit, int yUnit, Image img) {
         super(xUnit, yUnit, img);
     }
@@ -20,17 +20,21 @@ public class Bomber extends Movable {
     @Override
     public void kill() {
         setAlive(false);
-        Audio.playSound("res/audio/dead.wav", 0);
-        if (BombermanGame.lives > 0) {
+//        if (BombermanGame.lives > 0) {
+//            BombermanGame.lives -= 1;
+//        }
+        if (checkAlive) {
+            Audio.playSound("res/audio/dead.wav", 0);
             BombermanGame.lives -= 1;
-
+            checkAlive = false;
         }
     }
 
     @Override
     public void afterKill() {
+        checkAlive = true;
         if (BombermanGame.lives > 0) {
-                BombermanGame.restartMap();
+            BombermanGame.restartMap();
 //            setAlive(true);
         } else {
             setGameOver(true);
@@ -140,7 +144,6 @@ public class Bomber extends Movable {
             if (entity instanceof Enemy) {
                 if (entity.intersectLeft(this)) {
                     BombermanGame.bomberman.kill();
-                    System.out.println(1);
                 }
             }
         }
@@ -173,7 +176,6 @@ public class Bomber extends Movable {
             if (entity instanceof Enemy) {
                 if (entity.intersectRight(this)) {
                     BombermanGame.bomberman.kill();
-                    System.out.println(3);
                 }
             }
         }
@@ -206,7 +208,6 @@ public class Bomber extends Movable {
             if (entity instanceof Enemy) {
                 if (entity.intersectDown(this)) {
                     BombermanGame.bomberman.kill();
-                    System.out.println(0);
                 }
             }
         }
@@ -239,7 +240,6 @@ public class Bomber extends Movable {
             if (entity instanceof Enemy) {
                 if (entity.intersectUp(this)) {
                     BombermanGame.bomberman.kill();
-                    System.out.println(2);
                 }
             }
         }
@@ -255,7 +255,7 @@ public class Bomber extends Movable {
 
     @Override
     public void update() {
-        // TODO: Die
+        // TODO: Chết
         if (!isAlive) {
             if (frameToDisappear > 0) {
                 switch (frameToDisappear) {
@@ -300,7 +300,7 @@ public class Bomber extends Movable {
             }
         }
 
-        // TODO: Di chuyen
+        // TODO: Di chuyển
         if (isMoving && isAlive) {
             switch (lastDirection) {
                 case "RIGHT":
